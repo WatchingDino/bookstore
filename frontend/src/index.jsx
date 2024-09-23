@@ -8,8 +8,6 @@ import App from "./App";
 
 import { ToastContainer } from "react-toastify";
 
-import { Carousel, initMDB } from "mdb-ui-kit";
-
 import '../node_modules/primeicons/primeicons.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
