@@ -11,7 +11,7 @@ app.use(express.json({ limit: "100mb" }));
 // app.set("trust proxy", 1);
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://bookstore-6j2g1c93n-ian-magats-projects.vercel.app"],
     credentials: true,
   })
 );
