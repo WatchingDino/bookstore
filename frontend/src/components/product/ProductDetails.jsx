@@ -131,6 +131,7 @@ const ProductDetails = () => {
                             objectFit: "cover",
                             height: "400px",
                             borderRadius: "5px",
+                            border: "1px solid #ddd",
                           }}
                         />
                       </div>
@@ -209,7 +210,7 @@ const ProductDetails = () => {
               }}
             >
               <h2>
-                {product.name} <i className="pi pi-clone"></i>
+                {product.name}
               </h2>
               <h4>{product.series}</h4>
 

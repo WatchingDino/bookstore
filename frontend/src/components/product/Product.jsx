@@ -44,7 +44,7 @@ const Product = ({ product }) => {
             className="card-text font-weight-bold mb-0"
             style={{ fontSize: "1.5rem" }}
           >
-            ₱{product.price}
+            ₱{product.price.toFixed(2)}
           </p>
 
           <div className="d-flex flex-column align-items-end">

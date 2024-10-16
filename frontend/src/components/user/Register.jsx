@@ -72,9 +72,10 @@ const Register = () => {
 
       <div style={styles.container}>
         <div style={styles.leftPanel}>
-          <h1 style={styles.heading}>Welcome Back!</h1>
+          <h1 style={styles.heading}>Lorem Ipsum</h1>
           <p style={styles.paragraph}>
-            To keep connected with us please login with your personal info
+            Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut
+            labore et dolore magna aliqua.
           </p>
           <Link to="/login" style={styles.signInButton}>
             Login

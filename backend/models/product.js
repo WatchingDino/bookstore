@@ -4,24 +4,24 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please Enter the Product Name"],
-    // trim: true,
-    // maxLength: [100, "Product name cannot exceed 100 characters"],
   },
-  // category: {
-  //   type: String,
-  //   required: [true, "Please Select Category for this Product"],
-  // },
-  genre: 
-  // [
-    {
-      // type: String,
-      type: [String], // Changed to an array of strings to allow multiple genres
-      required: [true, "Please Select Genre for this Product"],
-    },
-  // ],
+  category: {
+    type: String,
+    default: "",
+    // required: [true, "Please Select Category for this Product"],
+  },
+  genre: {
+    type: [String],
+    // required: [true, "Please Select Genre for this Product"],
+  },
   series: {
     type: String,
     default: "",
+  },
+  highlight: {
+    type: String,
+    default: "",
+    // required: [true, "Please Enter the Highlight"],
   },
   description: {
     type: String,
@@ -29,7 +29,13 @@ const productSchema = new mongoose.Schema({
   },
   author: {
     type: String,
-    required: [true, "Please Enter the Author"],
+    default: "",
+    // required: [true, "Please Enter the Author"],
+  },
+  publisher: {
+    type: String,
+    default: "",
+    // required: [true, "Please Enter the Publisher"],
   },
   price: {
     type: Number,

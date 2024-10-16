@@ -62,12 +62,12 @@ const Login = () => {
       </div>
 
       <div style={styles.rightPanel}>
-        <h1 style={styles.heading}>Hello, Friend!</h1>
+        <h1 style={styles.heading}>Lorem Ipsum</h1>
         <p style={styles.paragraph}>
-          Enter your personal details and start your journey with us
+        Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
         </p>
         <Link to="/register" style={styles.signUpButton}>
-          Register
+          Sign-up
         </Link>
       </div>
     </div>
