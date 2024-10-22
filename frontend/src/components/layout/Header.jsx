@@ -41,15 +41,24 @@ const Header = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/orders/me" style={{ color: "#fff" }}>
+                <Link
+                  className="nav-link"
+                  to="/orders/me"
+                  style={{ color: "#fff" }}
+                >
                   Orders
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/dashboard" style={{ color: "#fff" }}>
+                <Link
+                  className="nav-link"
+                  to="/dashboard"
+                  style={{ color: "#fff" }}
+                >
                   Dashboard
                 </Link>
               </li>
+             
             </ul>
           </div>
         )}
@@ -63,7 +72,7 @@ const Header = () => {
               <Link
                 type="button"
                 id="dropDownMenuButton"
-                data-toggle="dropdown"
+                data-bs-toggle="dropdown" // updated from data-toggle
                 aria-haspopup="true"
                 aria-expanded="false"
                 style={{ cursor: "pointer" }}

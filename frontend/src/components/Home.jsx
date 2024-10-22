@@ -51,41 +51,50 @@ const Home = () => {
         <Loader />
       ) : (
         <Fragment>
-          <section id="products" className="container mt-5">
-            <div className="row">
-              {keyword ? (
-                <Fragment>
-                  <div className="col-6 col-md-9">
-                    <div className="row">
-                      {products.map((product) => (
-                        <Product key={product._id} product={product} col={4} />
-                      ))}
+          <div style={{ backgroundColor: "rgba(81, 67, 139, 0.5)" }}>
+            <br />
+            <section id="products" className="container">
+              <div className="row">
+                {keyword ? (
+                  <Fragment>
+                    <div className="col-6 col-md-9">
+                      <div className="row">
+                        {products.map((product) => (
+                          <Product
+                            key={product._id}
+                            product={product}
+                            col={4}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </Fragment>
-              ) : (
-                products.map((product) => (
-                  <Product key={product._id} product={product} col={3} />
-                ))
-              )}
-            </div>
-          </section>
-          {resPerPage <= count && (
-            <div className="d-flex justify-content-center mt-5">
-              <Pagination
-                activePage={currentPage}
-                itemsCountPerPage={resPerPage}
-                totalItemsCount={productsCount}
-                onChange={setCurrentPageNo}
-                nextPageText={"Next"}
-                prevPageText={"Prev"}
-                firstPageText={"First"}
-                lastPageText={"Last"}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
-            </div>
-          )}
+                  </Fragment>
+                ) : (
+                  products.map((product) => (
+                    <Product key={product._id} product={product} col={3} />
+                  ))
+                )}
+              </div>
+            </section>
+            {/* MAY PROBLEMA SA PAGINATION */}
+            {/* {resPerPage <= count && (
+              <div className="d-flex justify-content-center mt-5">
+                <Pagination
+                  activePage={currentPage}
+                  itemsCountPerPage={resPerPage}
+                  totalItemsCount={productsCount}
+                  onChange={setCurrentPageNo}
+                  nextPageText={"Next"}
+                  prevPageText={"Prev"}
+                  firstPageText={"First"}
+                  lastPageText={"Last"}
+                  itemClass="page-item"
+                  linkClass="page-link"
+                />
+              </div>
+            )} */}
+            <br />
+          </div>
         </Fragment>
       )}
     </Fragment>

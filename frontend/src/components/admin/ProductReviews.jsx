@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { MDBDataTable } from "mdbreact";
+// import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
@@ -104,7 +104,7 @@ const ProductReviews = () => {
 
         actions: (
           <button
-            className="btn btn-danger py-1 px-2 ml-2"
+            className="btn btn-danger py-1 px-2 ms-2"
             onClick={() => deleteReviewHandler(review._id)}
           >
             <i className="fa fa-trash"></i>

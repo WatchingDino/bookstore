@@ -40,7 +40,7 @@ exports.newProduct = async (req, res, next) => {
 };
 
 exports.getProducts = async (req, res, next) => {
-  const resPerPage = 4;
+  const resPerPage = 12;
   const productsCount = await Product.countDocuments();
   // console.log(productsCount,req.query,Product.find())
   // console.log(Product.find().find())
@@ -76,7 +76,7 @@ exports.getSingleProduct = async (req, res, next) => {
 };
 
 exports.updateProduct = async (req, res, next) => {
-  let product = await Product.findById(req.params.id);  
+  let product = await Product.findById(req.params.id);
 
   if (!product) {
     return next(new ErrorHandler("Product not found", 404));
@@ -137,10 +137,11 @@ exports.createProductReview = async (req, res, next) => {
   const { rating, comment, productId } = req.body;
   const review = {
     user: req.user._id,
-    name: req.user.name,
+    name: req.user.firstName + " " + req.user.lastName,
     rating: Number(rating),
     comment,
   };
+
   const product = await Product.findById(productId);
   const isReviewed = product.reviews.find(
     (r) => r.user.toString() === req.user._id.toString()

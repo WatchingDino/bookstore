@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { MDBDataTable } from "mdbreact";
+// import { MDBDataTable } from "mdbreact";
 import MetaData from "../layout/MetaData";
 import Loader from "../layout/Loader";
 
@@ -83,7 +83,7 @@ const ProductsList = () => {
               <i className="fa fa-pencil"></i>
             </Link>
             <button
-              className="btn btn-danger py-1 px-2 ml-2"
+              className="btn btn-danger py-1 px-2 ms-2"
               onClick={() => deleteProductHandler(product._id)}
             >
               <i className="fa fa-trash"></i>

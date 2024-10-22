@@ -47,7 +47,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} exact="true" />
         <Route path="/product/:id" element={<ProductDetails />} exact="true" />
-        <Route path="/search/:keyword" element={<Home />} exact="true" />
+        {/* <Route path="/search/:keyword" element={<Home />} exact="true" /> */}
         <Route path="/login" element={<Login />} exact="true" />
         <Route path="/register" element={<Register />} exact="true" />
         <Route
@@ -215,6 +215,7 @@ function App() {
           }
         />
       </Routes>
+
       {!loading && (!isAuthenticated || user.role !== "admin") && <Footer />}
     </div>
   );
