@@ -29,58 +29,53 @@ const Product = ({ product }) => {
   // =============================================
 
   return (
-    <div className="col-sm-12 col-md-6 col-lg-3 my-3">
+    <div className="my-2 w-full sm:w-1/2 lg:w-1/4 font-roboto">
       <div
-        className="card rounded shadow cursor-pointer border-0"
+        className="rounded-lg shadow-lg cursor-pointer border-0 bg-white pb-3"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <Link
-          className="text-decoration-none text-reset"
-          to={`product/${product._id}`}
-        >
+        <Link className="no-underline text-black" to={`product/${product._id}`}>
           <img
-            className="card-img-top w-100 rounded-1"
+            className="rounded-t-lg w-full h-80 object-cover"
             src={product.images[currentImageIndex].url}
             alt="Product"
-            style={{
-              height: "350px",
-              objectFit: "cover",
-            }}
           />
         </Link>
 
-        <div className="d-flex justify-content-between align-items-center mt-2 px-3">
-          <div className="d-flex flex-column align-items-start">
-            {/* ================ FOR IMPROVEMENT NG SYSTEM IF MAG SALE ANG PRODUCT OR WHAT ================ */}
-            {/* <div className="d-flex">
-              <p className="card-text fw-bold text-muted mb-0 text-decoration-line-through fs-5">
-                ₱{product.price.toFixed(2)}
+        <div className="flex justify-between items-center mt-2 px-3">
+          <div className="flex flex-col items-start">
+            {/* FOR IMPROVEMENT OF SYSTEM IF PRICES HAD CHANGED */}
+            {/* <div className="flex">
+              <p className="text-gray-500 line-through mb-0 text-xl font-bold">
+                {product.price.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "PHP",
+                })}
               </p>
             </div> */}
-            <p
-              className="card-text fw-bold mb-0 fs-4"
-              style={{ color: "rgba(212, 17, 17, 0.8)" }}
-            >
-              ₱{product.price.toFixed(2)}
+            <p className="text-red-600 font-bold mb-0 text-2xl">
+              {product.price.toLocaleString("en-US", {
+                style: "currency",
+                currency: "PHP",
+              })}
             </p>
           </div>
 
-          <div className="d-flex flex-column align-items-end">
-            {/* MISSING ONCLICK */}
+          <div className="flex flex-col items-end">
             <Rating
               name="half-rating"
               value={product.ratings}
               precision={0.5}
               sx={{
-                fontSize: "20px",
+                fontSize: "25px",
                 lineHeight: "0.9",
               }}
               emptyIcon={
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            <p className="mb-0 text-muted" style={{ fontSize: "0.9rem" }}>
+            <p className="mb-0 text-gray-500 text-md">
               {product.numOfReviews === 0
                 ? "No Reviews"
                 : product.numOfReviews === 1
@@ -89,26 +84,24 @@ const Product = ({ product }) => {
             </p>
           </div>
         </div>
-        <div className="card-body d-flex flex-column align-items-start pt-1">
-          <h5 className="card-title mb-0 ">{product.name}</h5>
-          <h6 className="card-title text-muted mb-0">{product.author}</h6>
 
-          <div className="w-100 d-flex gap-1 mt-2">
-            <button
-              className="btn w-75 text-white"
-              style={{
-                backgroundColor: "#51438b",
-                fontSize: "14px",
-              }}
-            >
+        <div className="flex flex-col items-start px-3">
+          <p className="mb-0 text-xl px-1 pt-1 font-bold truncate w-full">
+            {product.name}
+          </p>
+          <p className="text-gray-600 text-md px-1 pb-1 font-semibold mb-0 truncate w-full">
+            {product.author}
+          </p>
+
+          <div className="w-full flex gap-1 mt-2">
+            <button className="bg-[#51438b] text-white h-10 font-semibold w-3/4 text-md rounded-md hover:bg-[#3e326e] transition-all duration-300">
               Add to Cart
             </button>
             <Link
               to={`product/${product._id}`}
-              className="text-white d-flex justify-content-center align-items-center w-25"
-              style={{ backgroundColor: "#51438b", borderRadius: "5px" }}
+              className="bg-[#51438b] text-white h-10 flex justify-center items-center w-1/4 rounded-md hover:bg-[#3e326e] transition-all duration-300"
             >
-              <i className="pi pi-info-circle" style={{ fontSize: "16px" }}></i>
+              <i className="pi pi-info-circle text-lg"></i>
             </Link>
           </div>
         </div>

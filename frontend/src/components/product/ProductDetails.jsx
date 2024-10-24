@@ -9,7 +9,17 @@ import StarIcon from "@mui/icons-material/Star";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import MetaData from "../layout/MetaData";
-// import ListReviews from "../review/ListReviews";
+import ListReviews from "../review/ListReviews";
+
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@nextui-org/react";
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
@@ -48,24 +58,53 @@ const ProductDetails = () => {
     dispatch(addItemToCart(id, quantity));
   };
 
-  // ================ IMAGES ================
+  // ================ IMAGES | THUMBNAIL MODAL ================
 
+  const carouselRef = useRef(null);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [showModal, setShowModal] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const timeoutRef = useRef(null);
+
+  const { isOpen: isModalOpen, onOpen, onOpenChange } = useDisclosure();
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setSelectedImage((prevIndex) =>
+        prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [product.images, isPaused]);
 
   const handleThumbnailClick = (index) => {
     setSelectedImage(index);
+    setIsPaused(true);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 4000);
   };
 
-  const handleMoreImagesClick = () => {
-    setShowModal(true);
-  };
+  // ================ AUTHOR | PUBLISHER ================
 
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
+  let displayOwner = "";
 
-  // ================ DESCRIPTION ================
+  if (product.author) {
+    displayOwner = product.author;
+  } else if (product.publisher) {
+    displayOwner = product.publisher;
+  } else {
+    displayOwner = "";
+  }
+
+  // ================ DESCRIPTION | READ MORE/LESS | NEW LINE ================
 
   const [isOpen, setIsOpen] = useState(false);
   const [showReadMoreButton, setShowReadMoreButton] = useState(false);
@@ -86,6 +125,34 @@ const ProductDetails = () => {
     display: "-webkit-box",
   };
 
+  const highlightDescription = (description) => {
+    return description.split(/~~(.*?)~~/g).map((part, index) => {
+      if (index % 2 !== 0) {
+        return (
+          <strong key={index} className="font-bold">
+            {part}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
+  const descriptionLines = product.description
+    ? product.description.split("//n")
+    : [];
+
+  // ================ GENRE ================
+
+  const formatGenres = (genres) => {
+    if (!genres || genres.length === 0) return "";
+    if (genres.length === 1) return genres[0];
+
+    const lastGenre = genres[genres.length - 1];
+    const otherGenres = genres.slice(0, -1);
+    return `${otherGenres.join(", ")} & ${lastGenre}`;
+  };
+
   // =============================================
 
   return (
@@ -94,57 +161,51 @@ const ProductDetails = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div
-            style={{
-              backgroundColor: "rgba(81, 67, 139, 0.5)",
-            }}
-          >
-            <div className="d-flex justify-content-around align-items-start">
-              <div className="mt-4" style={{ width: "45%" }}>
+          <div className="bg-[rgba(81,67,139,0.5)] font-roboto">
+            <div className="flex justify-around items-start">
+              {/* LEFT SIDE | PRODUCT IMAGE */}
+              <div className="mt-4 w-[45%]">
                 {product && product.images && product.images.length > 0 ? (
                   <div>
                     {/* Main Carousel */}
                     <div
                       className="carousel slide"
                       data-bs-ride="carousel"
-                      id="CurrentlyImage"
+                      data-bs-interval="4000"
+                      id="imageIndex"
+                      ref={carouselRef}
                     >
                       <div className="carousel-indicators">
                         {product.images.map((image, index) => (
                           <button
                             key={index}
                             type="button"
-                            data-bs-target="#CurrentlyImage"
+                            data-bs-target="#imageIndex"
                             data-bs-slide-to={index}
-                            className={index === selectedImage ? "active" : ""}
+                            className={`${
+                              index === selectedImage ? "active" : ""
+                            } invert-[80%] opacity-90`}
                             aria-current={
                               index === selectedImage ? "true" : "false"
                             }
                             aria-label={`Slide ${index + 1}`}
-                            style={{
-                              filter: "invert(80%)",
-                              opacity: "0.9",
-                            }}
+                            onClick={() => handleThumbnailClick(index)}
                           ></button>
                         ))}
                       </div>
 
                       {/* Carousel Images */}
-                      <div className="carousel-inner rounded">
+                      <div className="carousel-inner">
                         {product.images.map((image, index) => (
                           <div
                             key={index}
-                            className={`carousel-item ${
+                            className={`carousel-item  ${
                               index === selectedImage ? "active" : ""
                             }`}
                           >
                             <img
                               src={image.url}
-                              className="d-block w-100"
-                              style={{
-                                height: "500px",
-                                objectFit: "contain",
-                              }}
+                              className="w-full h-[500px] object-contain rounded"
                               alt={`Slide ${index + 1}`}
                             />
                           </div>
@@ -155,7 +216,7 @@ const ProductDetails = () => {
                       <button
                         className="carousel-control-prev"
                         type="button"
-                        data-bs-target="#CurrentlyImage"
+                        data-bs-target="#imageIndex"
                         data-bs-slide="prev"
                         onClick={() =>
                           setSelectedImage((prev) =>
@@ -164,12 +225,8 @@ const ProductDetails = () => {
                         }
                       >
                         <span
-                          className="carousel-control-prev-icon"
+                          className="carousel-control-prev-icon invert-[80%] opacity-90"
                           aria-hidden="true"
-                          style={{
-                            filter: "invert(80%)",
-                            opacity: "0.9",
-                          }}
                         ></span>
                         <span className="visually-hidden">Previous</span>
                       </button>
@@ -177,7 +234,7 @@ const ProductDetails = () => {
                       <button
                         className="carousel-control-next"
                         type="button"
-                        data-bs-target="#CurrentlyImage"
+                        data-bs-target="#imageIndex"
                         data-bs-slide="next"
                         onClick={() =>
                           setSelectedImage((prev) =>
@@ -186,66 +243,43 @@ const ProductDetails = () => {
                         }
                       >
                         <span
-                          className="carousel-control-next-icon"
+                          className="carousel-control-next-icon invert-[80%] opacity-90"
                           aria-hidden="true"
-                          style={{
-                            filter: "invert(80%)",
-                            opacity: "0.9",
-                          }}
                         ></span>
                         <span className="visually-hidden">Next</span>
                       </button>
                     </div>
 
                     {/* Thumbnail Section */}
-                    <div className="mt-3 d-flex justify-content-center">
-                      <div className="row w-75 justify-content-center">
+                    <div className="mt-3 flex justify-center">
+                      <div className="flex flex-wrap w-3/4 justify-center">
                         {product.images.slice(0, 3).map((image, index) => (
-                          <div
-                            key={index}
-                            className="col-3 p-1"
-                            style={{ cursor: "pointer" }}
-                          >
+                          <div key={index} className="w-1/4 p-1 cursor-pointer">
                             <img
                               src={image.url}
-                              className="img-thumbnail rounded object-fit-cover p-0"
+                              className={`rounded-lg p-0 object-cover h-[100px] w-[100px] ${
+                                selectedImage === index
+                                  ? "border-2 border-[#51438b]"
+                                  : "border-none"
+                              }`}
                               alt={`Thumbnail ${index + 1}`}
                               onClick={() => handleThumbnailClick(index)}
-                              style={{
-                                height: "100px",
-                                width: "100px",
-                                border:
-                                  selectedImage === index
-                                    ? "2px solid #51438b"
-                                    : "none",
-                              }}
                             />
                           </div>
                         ))}
 
                         {product.images.length > 3 && (
                           <div
-                            className="col-3 p-1 position-relative"
-                            style={{ cursor: "pointer" }}
-                            onClick={handleMoreImagesClick}
+                            className="w-1/4 p-1 relative cursor-pointer"
+                            onClick={onOpen}
                           >
                             <div
-                              className="img-thumbnail position-relative border-0"
+                              className="relative border-0 h-[100px] w-[100px] bg-cover bg-center rounded"
                               style={{
-                                height: "100px",
-                                width: "100px",
                                 backgroundImage: `url(${product.images[3].url})`,
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
                               }}
                             >
-                              <div
-                                className="position-absolute top-0 start-0 h-100 w-100 d-flex justify-content-center align-items-center text-white rounded"
-                                style={{
-                                  backgroundColor: "rgba(0, 0, 0, 0.5)",
-                                  fontSize: "1.5rem",
-                                }}
-                              >
+                              <div className="absolute top-0 left-0 h-full w-full flex justify-center items-center text-white bg-black bg-opacity-50 rounded text-2xl">
                                 +{product.images.length - 3}
                               </div>
                             </div>
@@ -254,94 +288,110 @@ const ProductDetails = () => {
                       </div>
                     </div>
 
-                    {/* All Images */}
-                    <div
-                      className={`modal fade ${showModal ? "show" : ""}`}
-                      tabIndex="-1"
-                      style={{ display: showModal ? "block" : "none" }}
-                      aria-hidden={!showModal}
-                    >
-                      <div className="modal-dialog modal-lg">
-                        <div className="modal-content">
-                          <div className="modal-header d-flex justify-content-center">                        
-                            <h5 className="modal-title text-center flex-grow-1">
-                              {/* {product.name} */}
-                            </h5>
-                            <button
-                              type="button"
-                              className="btn-close"
-                              onClick={handleModalClose}
-                              aria-label="Close"
-                            ></button>
-                          </div>
-                          <div className="modal-body">
-                            <div className="row">
-                              {product.images.map((image, index) => (
-                                <div
-                                  key={index}
-                                  className="col-3 p-2"
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <img
-                                    src={image.url}
-                                    className="img-fluid rounded w-100 h-auto"
-                                    alt={`Image ${index + 1}`}
-                                    onClick={() => {
-                                      setSelectedImage(index);
-                                      handleModalClose();
-                                    }}
-                                    style={{ maxWidth: '80%' }}
-                                  />
+                    {/* Show All Images */}
+                    <>
+                      <Modal
+                        backdrop="blur"
+                        isOpen={isModalOpen}
+                        onOpenChange={onOpenChange}
+                        size="xl"
+                        classNames={{
+                          backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                          base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                          closeButton: "hover:bg-white/5 active:bg-white/10",
+                        }}
+                      >
+                        <ModalContent>
+                          {(onClose) => (
+                            <>
+                              <ModalHeader className="flex justify-center items-center text-xl">
+                                {product.name}
+                              </ModalHeader>
+                              <ModalBody>
+                                <div className="flex flex-wrap justify-center">
+                                  {product.images.map((image, index) => (
+                                    <div
+                                      key={index}
+                                      className="w-1/4 p-2 cursor-pointer flex justify-center"
+                                      onClick={() => {
+                                        setSelectedImage(index);
+                                        onClose();
+                                        if (timeoutRef.current)
+                                          clearTimeout(timeoutRef.current);
+                                        setTimeout(
+                                          () => setIsPaused(false),
+                                          4000
+                                        );
+                                      }}
+                                    >
+                                      <img
+                                        src={image.url}
+                                        className="rounded w-full h-auto w-max-3/5"
+                                        alt={`Image ${index + 1}`}
+                                      />
+                                    </div>
+                                  ))}
                                 </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                              </ModalBody>
+                              <ModalFooter>
+                                <Button
+                                  className="bg-[#51438b] text-md font-roboto shadow-lg shadow-indigo-500/20 text-white"
+                                  onPress={onClose}
+                                >
+                                  Close
+                                </Button>
+                              </ModalFooter>
+                            </>
+                          )}
+                        </ModalContent>
+                      </Modal>
+                    </>
                   </div>
                 ) : (
-                  /* DISPLAY NO IMAGE */
-                  <div
-                    className="d-flex justify-content-center align-items-center rounded"
-                    style={{
-                      height: "500px",
-                      backgroundColor: "lightgray",
-                    }}
-                  >
+                  /* Display no Image */
+                  <div className="flex justify-center items-center rounded h-[500px] bg-lightgray">
                     <i
-                      className="fas fa-image"
-                      style={{ fontSize: "48px" }}
+                      className="pi pi-image text-5xl text-darkgray"
                       aria-label="Image Unavailable."
                     ></i>
                   </div>
                 )}
               </div>
 
-              <div
-                className="mt-4 shadow rounded p-4"
-                style={{
-                  width: "45%",
-                  backgroundColor: "#fff",
-                }}
-              >
-                <h2>{product.name}</h2>
-                {/* <h4>{product.author}</h4>
-                <h4>{product.series}</h4> */}
-                <div className="d-flex align-items-center">
+              {/* RIGHT SIDE | PRODUCT INFORMATION */}
+              <div className="mt-4 shadow rounded p-4 w-[45%] bg-white">
+                <p className="text-xl font-bold">
+                  {product.name}
+                  {product.series &&
+                    product.series.trim() &&
+                    ` (${product.series})`}
+                </p>
+
+                <p className="text-gray-500 font-semibold text-lg">
+                  {displayOwner}
+                </p>
+
+                <div className="flex items-center">
                   <Rating
                     name="half-rating"
                     value={product.ratings}
                     precision={0.5}
                     sx={{
                       fontSize: "20px",
-                      lineHeight: "0.9",
+                      lineHeight: "0.8",
                     }}
                     emptyIcon={
                       <StarIcon style={{ opacity: 0.65 }} fontSize="inherit" />
                     }
                   />
-                  {/* <span className="ms-1 lh-1">{product.ratings.toFixed(1)}</span> */}
+                  <span className="ms-1 lh-1">
+                    {product?.ratings !== undefined
+                      ? product.ratings % 1 === 0
+                        ? product.ratings.toFixed(0)
+                        : product.ratings.toFixed(1)
+                      : ""}
+                  </span>
+
                   <span className="ms-1 lh-1">
                     {product.numOfReviews === 0
                       ? "(No Reviews)"
@@ -351,53 +401,70 @@ const ProductDetails = () => {
                   </span>
                 </div>
 
-                <h4 className="mt-3">Description:</h4>
+                <p className="mt-2 font-semibold pt-2">Description:</p>
 
                 <p
-                  className="fw-bold"
+                  className="mb-0 text-justify pt-1"
                   style={{
-                    textAlign: "justify",
-                  }}
-                >
-                  {product.highlight}
-                </p>
-
-                <p
-                  className="mb-0"
-                  style={{
-                    textAlign: "justify",
                     ...(isOpen ? null : paragraphStyles),
                   }}
                   ref={ref}
                 >
-                  {product.description}
+                  {descriptionLines.map((line, index) => (
+                    <span key={index}>
+                      {highlightDescription(line)}
+                      {index < descriptionLines.length - 1 && (
+                        <span className="pt-1 block" />
+                      )}
+                    </span>
+                  ))}
                 </p>
                 {showReadMoreButton && (
-                  <div className="d-flex justify-content-end">
+                  <div className="flex justify-end">
                     <span
                       onClick={() => setIsOpen(!isOpen)}
-                      style={{
-                        color: "#51438b",
-                        cursor: "pointer",
-                      }}
+                      className="text-[#51438b] cursor-pointer"
                     >
                       {isOpen ? "Read Less" : "Read More"}
                     </span>
                   </div>
                 )}
 
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                  <p style={{ margin: 0 }}>
-                    Status:
+                {product.publisher && (
+                  <p className="pt-1">
+                    <span className="font-bold">Publisher:</span>{" "}
+                    {product.publisher}
+                  </p>
+                )}
+
+                {product.category && (
+                  <p className="pt-1">
+                    <span className="font-bold">Category:</span>{" "}
+                    {product.category}
+                  </p>
+                )}
+
+                {product && product.genre && product.genre.length > 0 && (
+                  <p className="pt-1">
+                    <span className="font-bold">Genre:</span>{" "}
+                    {formatGenres(product.genre)}
+                  </p>
+                )}
+
+                <div className="flex justify-between items-center">
+                  <p className="m-0">
+                    <span className="font-bold">Status:</span>
                     <span
-                      style={{ color: product.stock > 0 ? "green" : "red" }}
+                      className={`font-bold ${
+                        product.stock > 0 ? "text-green-600" : "text-red-600"
+                      }`}
                     >
                       {product.stock > 0 ? " In Stock" : " Out of Stock"}
                     </span>
                   </p>
-                  <div className="d-flex align-items-center">
+                  <div className="flex items-center">
                     <span
-                      className="btn btn-danger minus me-2"
+                      className="bg-red-500 text-white rounded px-4 py-2 mr-2 cursor-pointer text-lg hover:bg-red-800 transition-all duration-300"
                       onClick={decreaseQty}
                       disabled={product.stock === 0}
                     >
@@ -405,13 +472,12 @@ const ProductDetails = () => {
                     </span>
                     <input
                       type="number"
-                      className="form-control count text-center me-2"
+                      className="form-control count text-center mr-2 w-1/2"
                       value={quantity}
-                      readOnly
-                      style={{ width: "50%" }}
+                      disabled
                     />
                     <span
-                      className="btn btn-primary plus"
+                      className="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer text-lg hover:bg-blue-800 transition-all duration-300"
                       onClick={increaseQty}
                       disabled={product.stock === 0}
                     >
@@ -420,51 +486,44 @@ const ProductDetails = () => {
                   </div>
                 </div>
 
-                <div className="d-flex justify-content-around mt-4">
+                <div className="flex items-center justify-around mt-3">
                   <button
-                    className="text-white border-0 text-center rounded pointer"
+                    className={`text-white text-center font-bold rounded py-2 pointer w-[55%] hover:bg-[#3e326e] transition-all duration-300 ${
+                      product.stock === 0 ? "bg-opacity-50" : "bg-[#51438b]"
+                    }`}
                     onClick={addToCart}
-                    style={{
-                      width: "55%",
-                      backgroundColor: "#51438b",
-                      opacity: product.stock === 0 ? 0.5 : 1,
-                    }}
                     disabled={product.stock === 0}
                   >
                     Add to Cart
                   </button>
-                  <p
-                    className="m-0 fw-bold"
-                    style={{
-                      color: "rgba(212, 17, 17, 0.8)",
-                      fontSize: "26px",
-                    }}
-                  >
-                    ₱
+                  <p className="m-0 font-bold text-red-600 text-2xl">
                     {product?.price !== undefined
-                      ? product.price.toFixed(2)
+                      ? product.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "PHP",
+                        })
                       : "Price Unavailable"}
                   </p>
                 </div>
               </div>
             </div>
-            {/* <div
-            style={{
-              marginTop: "30px",
-              padding: "20px",
-              width: "80%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#fff",
-            }}
-          >
-            {product.reviews && product.reviews.length > 0 ? (
-              <ListReviews reviews={product.reviews} />
-            ) : (
-              <p>No reviews yet.</p>
-            )}
-          </div> */}
+            <div
+              style={{
+                marginTop: "30px",
+                padding: "20px",
+                width: "80%",
+                marginLeft: "auto",
+                marginRight: "auto",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+                backgroundColor: "#fff",
+              }}
+            >
+              {product && product.reviews && product.reviews.length > 0 ? (
+                <ListReviews reviews={product.reviews} />
+              ) : (
+                <p>No reviews yet.</p>
+              )}
+            </div>
             <br />
           </div>
         </Fragment>
