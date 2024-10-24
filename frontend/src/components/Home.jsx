@@ -51,31 +51,17 @@ const Home = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div style={{ backgroundColor: "rgba(81, 67, 139, 0.5)" }}>
-            <br />
+          <div className="bg-[rgba(81,67,139,0.5)] pt-3">
             <section id="products" className="container">
               <div className="row">
-                {keyword ? (
-                  <Fragment>
-                    <div className="col-6 col-md-9">
-                      <div className="row">
-                        {products.map((product) => (
-                          <Product
-                            key={product._id}
-                            product={product}
-                            col={4}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </Fragment>
-                ) : (
-                  products.map((product) => (
-                    <Product key={product._id} product={product} col={3} />
-                  ))
-                )}
+                <Fragment>
+                  {products.map((product) => (
+                    <Product key={product._id} product={product} />
+                  ))}
+                </Fragment>
               </div>
             </section>
+
             {/* MAY PROBLEMA SA PAGINATION */}
             {/* {resPerPage <= count && (
               <div className="d-flex justify-content-center mt-5">
