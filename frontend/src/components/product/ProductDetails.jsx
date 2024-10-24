@@ -193,7 +193,7 @@ const ProductDetails = () => {
                 </nav>
               </section>
 
-              <hr className="border-black mx-5" />
+              <hr className="border-gray-500 mx-5" />
               <section id="productInformation" className="pb-5">
                 <div className="flex justify-around items-start">
                   {/* LEFT SIDE | PRODUCT IMAGES */}
@@ -436,6 +436,7 @@ const ProductDetails = () => {
                         sx={{
                           fontSize: "25px",
                           lineHeight: "0.8",
+                          marginTop: '-2px',
                         }}
                         emptyIcon={
                           <StarIcon
@@ -574,8 +575,8 @@ const ProductDetails = () => {
                 <div className="mb-2">
                   <p className="text-lg font-semibold">Recent Reviews</p>
                 </div>
-                <hr className="border-black" />
-                <div className="mt-8 p-5 w-4/5 mx-auto shadow-md bg-white">
+                <hr className="border-gray-600" />
+                <div className="w-full">
                   {product && product.reviews && product.reviews.length > 0 ? (
                     <ListReviews reviews={product.reviews} />
                   ) : (
