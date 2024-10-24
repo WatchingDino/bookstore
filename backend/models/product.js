@@ -5,7 +5,7 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please Enter the Product Name"],
   },
-  category: {
+  category: { 
     type: String,
     default: "",
     // required: [true, "Please Select Category for this Product"],
@@ -17,11 +17,6 @@ const productSchema = new mongoose.Schema({
   series: {
     type: String,
     default: "",
-  },
-  highlight: {
-    type: String,
-    default: "",
-    // required: [true, "Please Enter the Highlight"],
   },
   description: {
     type: String,

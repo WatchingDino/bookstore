@@ -1,66 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import {CircularProgress} from "@nextui-org/react";
 
 const Loader = () => {
-  const [progress, setProgress] = useState(10);
+  const [value, setValue] = React.useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) => (prevProgress >= 100 ? 0 : prevProgress + 10));
-    }, 800);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((v) => (v >= 100 ? 0 : v + 10));
+    }, 500);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div
-      className="loader"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)', 
-      }}
-    >
-      <div style={{ position: 'relative', display: 'inline-flex' }}>
-        <svg className="progress-ring" width="80" height="80">
-          <circle
-            className="progress-ring__circle"
-            stroke="#51438b" 
-            strokeWidth="4"
-            fill="transparent"
-            r="36"
-            cx="40"
-            cy="40"
-            style={{
-              strokeDasharray: 226,
-              strokeDashoffset: 226 - (226 * progress) / 100,
-              transition: "stroke-dashoffset 0.5s ease",
-            }}
-          />
-        </svg>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '12px',
-            color: '#555',
-          }}
-        >
-          {`${Math.round(progress)}%`}
-        </div>
-      </div>
-    </div>
+    <div className="flex justify-center items-center h-screen">
+    <CircularProgress
+      aria-label="Loading..."
+      size="lg"
+      value={value}
+      color="secondary" 
+      showValueLabel={true}
+    />
+  </div>
   );
 };
 
