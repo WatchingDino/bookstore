@@ -37,7 +37,7 @@ const Product = ({ product }) => {
       >
         <Link className="no-underline text-black" to={`product/${product._id}`}>
           <img
-            className="rounded-t-lg w-full h-80 object-cover"
+            className="rounded-t-lg w-full h-64 object-cover"
             src={product.images[currentImageIndex].url}
             alt="Product"
           />
@@ -47,14 +47,14 @@ const Product = ({ product }) => {
           <div className="flex flex-col items-start">
             {/* FOR IMPROVEMENT OF SYSTEM IF PRICES HAD CHANGED */}
             {/* <div className="flex">
-              <p className="text-gray-500 line-through mb-0 text-xl font-bold">
+              <p className="text-gray-500 line-through mb-0 text-lg font-bold">
                 {product.price.toLocaleString("en-US", {
                   style: "currency",
                   currency: "PHP",
                 })}
               </p>
             </div> */}
-            <p className="text-red-600 font-bold mb-0 text-2xl">
+            <p className="text-red-600 font-bold mb-0 text-xl">
               {product.price.toLocaleString("en-US", {
                 style: "currency",
                 currency: "PHP",
@@ -66,16 +66,16 @@ const Product = ({ product }) => {
             <Rating
               name="half-rating"
               value={product.ratings}
-              precision={0.5}
+              precision={0.1}
               sx={{
-                fontSize: "25px",
+                fontSize: "20px",
                 lineHeight: "0.9",
               }}
               emptyIcon={
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
             />
-            <p className="mb-0 text-gray-500 text-md">
+            <p className="mb-0 text-gray-500 text-sm">
               {product.numOfReviews === 0
                 ? "No Reviews"
                 : product.numOfReviews === 1
@@ -86,22 +86,22 @@ const Product = ({ product }) => {
         </div>
 
         <div className="flex flex-col items-start px-3">
-          <p className="mb-0 text-xl px-1 pt-1 font-bold truncate w-full">
+          <p className="mb-0 text-lg px-1 pt-1 font-bold truncate w-full">
             {product.name}
           </p>
-          <p className="text-gray-600 text-md px-1 pb-1 font-semibold mb-0 truncate w-full">
+          <p className="text-gray-600 text-sm px-1 pb-1 font-semibold mb-0 truncate w-full">
             {product.author}
           </p>
 
           <div className="w-full flex gap-1 mt-2">
-            <button className="bg-[#51438b] text-white h-10 font-semibold w-3/4 text-md rounded-md hover:bg-[#3e326e] transition-all duration-300">
+            <button className="bg-[#51438b] text-white h-8 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
               Add to Cart
             </button>
             <Link
               to={`product/${product._id}`}
-              className="bg-[#51438b] text-white h-10 flex justify-center items-center w-1/4 rounded-md hover:bg-[#3e326e] transition-all duration-300"
+              className="bg-[#51438b] text-white h-8 flex justify-center items-center w-14 rounded-md hover:bg-[#3e326e] transition-all duration-300"
             >
-              <i className="pi pi-info-circle text-lg"></i>
+              <i className="pi pi-info-circle text-md"></i>
             </Link>
           </div>
         </div>

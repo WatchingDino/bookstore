@@ -1,11 +1,31 @@
-import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/userActions";
+import { getProductDetails } from "../../actions/productActions";
 
 const Header = () => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
+
+  const location = useLocation();
+
+  const { id } = useParams();
+  const productDetails = useSelector((state) => state.productDetails);
+  const { product } = productDetails;
+  const [productName, setProductName] = useState("");
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getProductDetails(id));
+    }
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (product) {
+      setProductName(product.name);
+    }
+  }, [product]);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -13,107 +33,128 @@ const Header = () => {
 
   return (
     <Fragment>
-      <nav
-        className="navbar row align-items-center justify-content-between"
-        style={{ backgroundColor: "#51438b", padding: "5px 50px" }}
-      >
-        <div className="col-2">
-          <div className="navbar-brand">
-            <Link to="/">
-              <img
-                src="https://res.cloudinary.com/dfxyjskzh/image/upload/v1725723067/national_diaries_logo_trim_avdp5r.png"
-                alt="Logo"
-                style={{
-                  maxWidth: "150px",
-                  height: "auto",
-                }}
-              />
-            </Link>
-          </div>
+      <nav className="flex items-center justify-between px-5 py-2 bg-[#51438b]">
+        <div className="flex items-center w-1/6">
+          <Link to="/">
+            <img
+              src="https://res.cloudinary.com/dfxyjskzh/image/upload/v1725723067/national_diaries_logo_trim_avdp5r.png"
+              alt="Logo"
+              className="max-w-[150px] h-auto"
+            />
+          </Link>
         </div>
 
-        {user && (
-          <div className="col-6 text-center">
-            <ul className="nav justify-content-center">
-              <li className="nav-item">
-                <Link className="nav-link" to="/" style={{ color: "#fff" }}>
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/orders/me"
-                  style={{ color: "#fff" }}
-                >
-                  Orders
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="/dashboard"
-                  style={{ color: "#fff" }}
-                >
-                  Dashboard
-                </Link>
-              </li>
-             
-            </ul>
-          </div>
-        )}
+        <div className="w-2/3 text-center">
+          <ul className="flex justify-center space-x-4">
+            {/* <li>
+              <Link className="text-white hover:underline" to="/">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link className="text-white hover:underline" to="/products">
+                Products
+              </Link>
+            </li> */}
+            {/* 
+            <li>
+              <Link className="text-white hover:underline" to="/orders/me">
+                Orders
+              </Link>
+            </li>
+            <li>
+              <Link className="text-white hover:underline" to="/dashboard">
+                Dashboard
+              </Link>
+            </li>
+            */}
 
-        <div className="col-2 text-right">
+            <nav className="flex text-white rounded-lg" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                <li className="inline-flex items-center">
+                  <a
+                    href="/"
+                    className="inline-flex items-center text-md font-medium text-white hover:underline group"
+                  >
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    {location.pathname !== "/" && (
+                      <i className="pi pi-chevron-right text-white"></i>
+                    )}
+
+                    <a
+                      href={location.pathname === "/" ? "/" : "/products"}
+                      className="inline-flex ms-1 items-center text-md font-medium text-white hover:underline group"
+                    >
+                      Products
+                    </a>
+                  </div>
+                </li>
+                <li aria-current="page">
+                  <div className="flex items-center">
+                    {location.pathname !== "/" && (
+                      <i className="pi pi-chevron-right text-[#A8A1C5]"></i>
+                    )}
+                    <span className="ms-1 text-md font-medium text-[#A8A1C5]">
+                      {productName}
+                    </span>
+                  </div>
+                </li>
+              </ol>
+            </nav>
+          </ul>
+        </div>
+
+        <div className="w-1/6 text-right">
           {user ? (
-            <div className="dropdown d-flex align-items-center justify-content-end">
-              <span style={{ color: "#fff", marginRight: "10px" }}>
-                {user && user.name}
-              </span>
+            <div className="relative inline-flex items-center justify-end">
+              <span className="text-white mr-2">{user.name}</span>
               <Link
                 type="button"
                 id="dropDownMenuButton"
-                data-bs-toggle="dropdown" // updated from data-toggle
+                data-bs-toggle="dropdown" // Keep this if using Bootstrap JS for dropdown
                 aria-haspopup="true"
                 aria-expanded="false"
-                style={{ cursor: "pointer" }}
+                className="cursor-pointer"
               >
-                <figure className="avatar avatar-nav" style={{ margin: 0 }}>
+                <figure className="avatar">
                   <img
                     src={user.avatar && user.avatar.url}
-                    alt={user && user.name}
-                    className="rounded-circle"
-                    style={{
-                      width: "40px",
-                      height: "40px",
-                      border: "2px solid white",
-                    }}
+                    alt={user.name}
+                    className="rounded-full border-2 border-white w-10 h-10"
                   />
                 </figure>
               </Link>
               <div
-                className="dropdown-menu"
+                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20"
                 aria-labelledby="dropDownMenuButton"
               >
-                {user && user.role === "admin" && (
-                  <Link className="dropdown-item" to="/dashboard">
+                {user.role === "admin" && (
+                  <Link
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                    to="/dashboard"
+                  >
                     Dashboard
                   </Link>
                 )}
-                <Link className="dropdown-item" to="/orders/me">
+                <Link
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  to="/orders/me"
+                >
                   Orders
                 </Link>
-                <Link className="dropdown-item" to="/me">
+                <Link
+                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  to="/me"
+                >
                   Profile
                 </Link>
-                <hr
-                  style={{
-                    margin: "5px auto",
-                    borderTop: "1px solid #ccc",
-                    width: "80%",
-                  }}
-                />
+                <hr className="my-1 border-t border-gray-300" />
                 <Link
-                  className="dropdown-item text-danger"
+                  className="block px-4 py-2 text-red-500 hover:bg-gray-100"
                   to="/"
                   onClick={logoutHandler}
                 >
@@ -124,17 +165,10 @@ const Header = () => {
           ) : (
             !loading && (
               <Link
-                to="/register"
-                className="btn"
-                style={{
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: "14px",
-                  backgroundColor: "transparent",
-                  border: "2px solid white",
-                }}
+                to="/login"
+                className="btn text-white font-bold text-sm border-2 border-white px-4 py-2 hover:bg-white hover:text-[#51438b] hover:border-[#51438b] "
               >
-                Sign-up
+                Login
               </Link>
             )
           )}

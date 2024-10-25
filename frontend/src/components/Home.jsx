@@ -1,49 +1,39 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Pagination from "react-js-pagination";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
 import { getProducts } from "../actions/productActions";
 import Product from "./product/Product";
 import Loader from "./layout/Loader";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const {
-    loading,
-    products,
-    error,
-    productsCount,
-    resPerPage,
-    filteredProductsCount,
-  } = useSelector((state) => state.products);
+  const dispatch = useDispatch(); //
+
+  const { loading, products, error } = useSelector((state) => state.products);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [price] = useState([1, 100000]);
-
   let { keyword } = useParams();
 
-  const notify = (error = "") => toast.error(error);
+  useEffect(() => {
+    dispatch(getProducts(keyword, currentPage, price));
+  }, [dispatch, currentPage, keyword, price]);
+
+  // ================ NAVIGATE PRODUCTS SECTION | BREADCRUMBS ================
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    if (error) {
-      notify(error);
+    if (location.pathname === "/products") {
+      const productsSection = document.getElementById("products");
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: "smooth" });
+      }
+      navigate("/");
     }
-    dispatch(getProducts(keyword, currentPage, price));
-  }, [dispatch, error, currentPage, keyword, price]);
+  }, [location.pathname, navigate]);
 
-  function setCurrentPageNo(pageNumber) {
-    setCurrentPage(pageNumber);
-  }
-
-  let count = productsCount;
-
-  if (keyword) {
-    let count = filteredProductsCount;
-  }
+  // =============================================
 
   return (
     <Fragment>
@@ -51,34 +41,24 @@ const Home = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div className="bg-[rgba(81,67,139,0.5)] pt-3">
-            <section id="products" className="container">
-              <div className="row">
-                <Fragment>
-                  {products.map((product) => (
-                    <Product key={product._id} product={product} />
-                  ))}
-                </Fragment>
+          <div className="bg-[#A8A1C5] pt-1">
+            <section id="search" className="px-32">
+              <div className="container shadow bg-white rounded h-[40px] mt-4 flex justify-center items-center">
+                Search
               </div>
             </section>
-
-            {/* MAY PROBLEMA SA PAGINATION */}
-            {/* {resPerPage <= count && (
-              <div className="d-flex justify-content-center mt-5">
-                <Pagination
-                  activePage={currentPage}
-                  itemsCountPerPage={resPerPage}
-                  totalItemsCount={productsCount}
-                  onChange={setCurrentPageNo}
-                  nextPageText={"Next"}
-                  prevPageText={"Prev"}
-                  firstPageText={"First"}
-                  lastPageText={"Last"}
-                  itemClass="page-item"
-                  linkClass="page-link"
-                />
+            <section id="carousel" className="px-32">
+              <div className="container shadow bg-white rounded h-[320px] mt-3 flex justify-center items-center">
+                Image Carousel
               </div>
-            )} */}
+            </section>
+            <section id="products" className="container px-24 pt-4">
+              <div className="row">
+                {products.map((product) => (
+                  <Product key={product._id} product={product} />
+                ))}
+              </div>
+            </section>
             <br />
           </div>
         </Fragment>

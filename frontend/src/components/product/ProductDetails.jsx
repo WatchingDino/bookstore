@@ -74,7 +74,7 @@ const ProductDetails = () => {
       setSelectedImage((prevIndex) =>
         prevIndex === product.images.length - 1 ? 0 : prevIndex + 1
       );
-    }, 4000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [product.images, isPaused]);
@@ -89,7 +89,7 @@ const ProductDetails = () => {
 
     timeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 4000);
+    }, 5000);
   };
 
   // ================ AUTHOR | PUBLISHER ================
@@ -153,6 +153,28 @@ const ProductDetails = () => {
     return `${otherGenres.join(", ")} & ${lastGenre}`;
   };
 
+  // ================ REVIEWS ================
+
+  const [visibleReviewCount, setVisibleReviewCount] = useState(4);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showReviewMoreButton, setShowReviewMoreButton] = useState(false);
+  const reviewRef = useRef(null);
+
+  useEffect(() => {
+    if (product?.reviews?.length > 4) {
+      setShowReviewMoreButton(true);
+    }
+  }, [product?.reviews]);
+
+  const handleToggleSeeMore = () => {
+    if (isExpanded) {
+      setVisibleReviewCount(4);
+    } else {
+      setVisibleReviewCount(product.reviews.length);
+    }
+    setIsExpanded(!isExpanded);
+  };
+
   // =============================================
 
   return (
@@ -161,9 +183,9 @@ const ProductDetails = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div className="bg-[rgba(81,67,139,0.5)] font-roboto min-h-screen py-4">
+          <div className="bg-[#A8A1C5] font-roboto min-h-screen py-3">
             <div className="rounded bg-white mx-5 shadow">
-              <section id="breadcrumbs" className="mx-5 pb-3 pt-4">
+              {/* <section id="breadcrumbs" className="mx-5 pb-3 pt-4"> 
                 <nav
                   className="flex text-gray-700 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 rounded-lg"
                   aria-label="Breadcrumb"
@@ -174,27 +196,37 @@ const ProductDetails = () => {
                         href="/"
                         className="inline-flex items-center text-md font-medium text-gray-700 hover:text-[#51438b] hover:underline dark:text-gray-400 dark:hover:text-white group"
                       >
-                        <div class="inline-block cursor-pointer">
-                          <i class="bi bi-house mr-1 font-semibold group-hover:hidden"></i>
-                          <i class="bi bi-house-fill mr-1 font-semibold hidden group-hover:inline"></i>
+                        <div className="inline-block cursor-pointer">
+                          <i className="bi bi-house mr-1 font-semibold group-hover:hidden"></i>
+                          <i className="bi bi-house-fill mr-1 font-semibold hidden group-hover:inline"></i>
                         </div>
                         Home
                       </a>
                     </li>
+                    <li>
+                      <div className="flex items-center">
+                        <i className="pi pi-chevron-right mx-1 text-gray-400"></i>
+                        <a
+                          href="/products"
+                          className="inline-flex ms-1 items-center text-md font-medium text-gray-700 hover:text-[#51438b] hover:underline dark:text-gray-400 dark:hover:text-white group"
+                        >
+                          Products
+                        </a>
+                      </div>
+                    </li>             
                     <li aria-current="page">
                       <div className="flex items-center">
                         <i className="pi pi-chevron-right mx-1 text-gray-400"></i>
-                        <span className="ms-1 text-md font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+                        <span className="ms-1 text-md font-medium text-gray-500 dark:text-gray-400">
                           {product.name}
                         </span>
                       </div>
                     </li>
                   </ol>
                 </nav>
-              </section>
+              </section> */}
 
-              <hr className="border-gray-500 mx-5" />
-              <section id="productInformation" className="pb-5">
+              <section id="productInformation" className="pb-5 pt-1">
                 <div className="flex justify-around items-start">
                   {/* LEFT SIDE | PRODUCT IMAGES */}
                   <div className="mt-4 w-[45%]">
@@ -204,7 +236,7 @@ const ProductDetails = () => {
                         <div
                           className="carousel slide"
                           data-bs-ride="carousel"
-                          data-bs-interval="4000"
+                          data-bs-interval="5000"
                           id="imageIndex"
                           ref={carouselRef}
                         >
@@ -361,7 +393,7 @@ const ProductDetails = () => {
                                               clearTimeout(timeoutRef.current);
                                             setTimeout(
                                               () => setIsPaused(false),
-                                              4000
+                                              5000
                                             );
                                           }}
                                         >
@@ -432,11 +464,11 @@ const ProductDetails = () => {
                       <Rating
                         name="half-rating"
                         value={product.ratings}
-                        precision={0.5}
+                        precision={0.1}
                         sx={{
                           fontSize: "25px",
                           lineHeight: "0.8",
-                          marginTop: '-2px',
+                          marginTop: "-2px",
                         }}
                         emptyIcon={
                           <StarIcon
@@ -570,15 +602,46 @@ const ProductDetails = () => {
                   </div>
                 </div>
               </section>
-
-              <section id="reviews" className="mx-5 mt-5">
+              <section id="reviews" className="mx-5 mt-5 pb-5">
                 <div className="mb-2">
                   <p className="text-lg font-semibold">Recent Reviews</p>
                 </div>
                 <hr className="border-gray-600" />
                 <div className="w-full">
                   {product && product.reviews && product.reviews.length > 0 ? (
-                    <ListReviews reviews={product.reviews} />
+                    <>
+                      <div
+                        ref={reviewRef}
+                        className={`${
+                          product.reviews.length > 5 && isExpanded
+                            ? "overflow-y-auto h-[470px]"
+                            : ""
+                        }`}
+                      >
+                        <ListReviews
+                          reviews={product.reviews
+                            .sort(
+                              (a, b) =>
+                                new Date(b.dateReviewed) -
+                                new Date(a.dateReviewed)
+                            )
+                            .slice(0, visibleReviewCount)}
+                        />
+                      </div>
+
+                      {showReviewMoreButton && (
+                        <div className="relative flex items-center mt-3">
+                          <hr className="flex-grow border-t border-gray-600" />
+                          <span
+                            onClick={handleToggleSeeMore}
+                            className="text-[#51438b] text-md cursor-pointer hover:underline px-4"
+                          >
+                            {isExpanded ? "See Less" : "See More"}
+                          </span>
+                          <hr className="flex-grow border-t border-gray-600" />
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <p>No reviews yet.</p>
                   )}

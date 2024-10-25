@@ -10,7 +10,7 @@ const timeAgo = new TimeAgo("en-US");
 const ListReviews = ({ reviews }) => {
   return (
     <div className="">
-      {reviews.map((review) => (
+      {reviews.map((review, index) => (
         <div key={review._id} className="text-md mt-3">
           <div className="flex justify-between items-center pb-3">
             <div className="flex items-center">
@@ -26,7 +26,7 @@ const ListReviews = ({ reviews }) => {
                 <Rating
                   name="half-rating"
                   value={review.rating}
-                  precision={0.5}
+                  precision={0.1}
                   readOnly
                   sx={{
                     fontSize: "22px",
@@ -38,13 +38,14 @@ const ListReviews = ({ reviews }) => {
                 />
               </div>
             </div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 pr-5">
               {timeAgo.format(new Date(review.dateReviewed))}
             </p>
           </div>
 
           <p className="text-gray-700 mb-3">{review.comment}</p>
-          <hr className="border-gray-600" />
+
+          {index !== reviews.length - 1 && <hr className="border-gray-600" />}
         </div>
       ))}
     </div>
