@@ -25,8 +25,11 @@ export default {
         merriweather: ["Merriweather", "serif"],
       },
       colors: {
-        lightgray: '#d3d3d3', 
-        darkgray: '#A9A9A9', 
+        lightgray: "#d3d3d3",
+        darkgray: "#A9A9A9",
+        nbTheme: "#51438b",
+        nbDarkTheme: "#3e326e",
+        nbLightTheme: "#A8A1C5",
       },
     },
   },

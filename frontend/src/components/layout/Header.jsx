@@ -33,7 +33,7 @@ const Header = () => {
 
   return (
     <Fragment>
-      <nav className="flex items-center justify-between px-5 py-2 bg-[#51438b]">
+      <nav className="flex items-center justify-between px-5 py-2 bg-nbTheme">
         <div className="flex items-center w-1/6">
           <Link to="/">
             <img
@@ -56,7 +56,7 @@ const Header = () => {
                     Home
                   </a>
                 </li>
-                <li>
+                <li className="">
                   <div className="flex items-center">
                     {location.pathname !== "/" && (
                       <i className="pi pi-chevron-right text-white"></i>
@@ -70,16 +70,16 @@ const Header = () => {
                     </a>
                   </div>
                 </li>
-                <li aria-current="page">
-                  <div className="flex items-center">
-                    {location.pathname !== "/" && (
+                {location.pathname !== "/" && (
+                  <li className="" aria-current="page">
+                    <div className="flex items-center">
                       <i className="pi pi-chevron-right text-[#A8A1C5]"></i>
-                    )}
-                    <span className="ms-1 text-md font-medium text-[#A8A1C5]">
-                      {productName}
-                    </span>
-                  </div>
-                </li>
+                      <span className="ms-1 text-md font-medium text-[#A8A1C5]">
+                        {productName}
+                      </span>
+                    </div>
+                  </li>
+                )}
 
                 {/* <li>
                   <Link className="text-white hover:underline" to="/orders/me">
@@ -154,7 +154,7 @@ const Header = () => {
             !loading && (
               <Link
                 to="/login"
-                className="btn text-white font-bold text-sm border-2 border-white px-4 py-2 hover:bg-white hover:text-[#51438b] hover:border-[#51438b] "
+                className="text-white text-center text-sm font-bold rounded border-2 px-4 py-2 pointer hover:bg-nbDarkTheme transition-all duration-300"
               >
                 Login
               </Link>

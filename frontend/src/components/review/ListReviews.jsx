@@ -16,13 +16,13 @@ const ListReviews = ({ reviews }) => {
             <div className="flex items-center">
               <p className="font-semibold me-5">{review.name}</p>
               <div className="flex items-center">
-                {/* <span className="ms-2 me-1">
+                <span className="ms-2 text-muted me-1">
                   {review?.rating !== undefined
                     ? review.rating % 1 === 0
                       ? review.rating.toFixed(0)
                       : review.rating.toFixed(1)
                     : ""}
-                </span> */}
+                </span>
                 <Rating
                   name="half-rating"
                   value={review.rating}
@@ -30,6 +30,7 @@ const ListReviews = ({ reviews }) => {
                   readOnly
                   sx={{
                     fontSize: "22px",
+                    lineHeight: "0.8",
                     marginTop: "-2px",
                   }}
                   emptyIcon={

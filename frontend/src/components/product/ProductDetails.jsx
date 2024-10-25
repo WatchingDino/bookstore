@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductDetails, clearErrors } from "../../actions/productActions";
 import { addItemToCart } from "../../actions/cartActions";
 import Loader from "../layout/Loader";
 import { Rating } from "@mui/material";
@@ -10,6 +9,13 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import MetaData from "../layout/MetaData";
 import ListReviews from "../review/ListReviews";
+import { NEW_REVIEW_RESET } from "../../constants/productConstants";
+
+import {
+  getProductDetails,
+  newReview,
+  clearErrors,
+} from "../../actions/productActions";
 
 import {
   Modal,
@@ -19,6 +25,9 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 
 const ProductDetails = () => {
@@ -31,16 +40,157 @@ const ProductDetails = () => {
     (state) => state.productDetails
   );
 
+  const successMsg = (message = "") => toast.success(message);
+
   const notify = (error = "") => toast.error(error);
+
+  const { error: reviewError, success } = useSelector(
+    (state) => state.newReview
+  );
 
   useEffect(() => {
     dispatch(getProductDetails(id));
-
     if (error) {
       notify(error);
+      dispatch(success());
+    }
+    if (reviewError) {
+      notify(reviewError);
       dispatch(clearErrors());
     }
-  }, [dispatch, id, error]);
+    if (success) {
+      successMsg("Review Posted Successfully");
+      dispatch({ type: NEW_REVIEW_RESET });   
+    }
+  }, [dispatch, alert, error, reviewError, success, id]);
+
+  // ================ REVIEWS | MODAL ================
+
+  const { user } = useSelector((state) => state.auth);
+  const {
+    isOpen: isReviewOpen,
+    onOpen: onReviewOpen,
+    onClose: onReviewClose,
+  } = useDisclosure();
+
+  const onReviewAlwaysClose = () => {
+    setRatingValue(0);
+    setComment("");
+    onReviewClose();
+  };
+
+  const labels = {
+    0.1: "Extremely disappointing.",
+    0.2: "Not worth it.",
+    0.3: "Fell far below expectations.",
+    0.4: "Would not recommend.",
+    0.5: "Very dissatisfied.",
+    0.6: "Nearly unusable.",
+    0.7: "A letdown overall.",
+    0.8: "Serious issues encountered.",
+    0.9: "Quality is very low.",
+    1.0: "Poor experience.",
+    1.1: "Would not buy again.",
+    1.2: "Useless.",
+    1.3: "Almost unusable.",
+    1.4: "Not up to standard.",
+    1.5: "Below expectations.",
+    1.6: "Poor quality.",
+    1.7: "Could be improved.",
+    1.8: "Okay, but not great.",
+    1.9: "Average at best.",
+    2.0: "Just okay.",
+    2.1: "Could be better.",
+    2.2: "Fair product.",
+    2.3: "Not bad, not great.",
+    2.4: "Good in some aspects.",
+    2.5: "Meets basic expectations.",
+    2.6: "Acceptable quality.",
+    2.7: "Decent, but room for improvement.",
+    2.8: "Satisfied overall.",
+    2.9: "Does the job.",
+    3.0: "Pretty good.",
+    3.1: "Above average.",
+    3.2: "Solid quality.",
+    3.3: "Reliable and satisfactory.",
+    3.4: "Pleasantly surprised.",
+    3.5: "Better than expected.",
+    3.6: "Good value.",
+    3.7: "Would recommend.",
+    3.8: "Very happy with it.",
+    3.9: "Quality exceeded expectations.",
+    4.0: "Great product.",
+    4.1: "High quality.",
+    4.2: "Very impressed.",
+    4.3: "Highly recommend.",
+    4.4: "Stands out among similar products.",
+    4.5: "Exceptional quality.",
+    4.6: "Delighted with the purchase.",
+    4.7: "Fantastic experience.",
+    4.8: "Exactly what I needed.",
+    4.9: "Nearly perfect.",
+    5.0: "Outstanding, would buy again!",
+  };
+
+  const handleRatingChange = (event, newValue) => {
+    setRatingValue(newValue);
+    setComment(labels[newValue] || "");
+    setHover(-1);
+  };
+
+  const handleHoverChange = (event, newHover) => {
+    setHover(newHover);
+    if (newHover !== -1) {
+      setComment(labels[newHover] || "");
+    }
+  };
+
+  const handleInputChange = (event) => {
+    const input = parseFloat(event.target.value);
+    if (!isNaN(input) && input >= 0 && input <= 5) {
+      setRatingValue(input);
+      setComment(labels[input] || "");
+      setHover(-1);
+    }
+  };
+
+  const [ratingValue, setRatingValue] = useState();
+  const [hover, setHover] = useState(-1);
+  const [comment, setComment] = useState("");
+
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const reviewHandler = () => {
+    const formData = new FormData();
+    formData.set("rating", ratingValue);
+    formData.set("comment", comment);
+    formData.set("productId", id);
+    dispatch(newReview(formData));
+  };
+
+  // ================ REVIEWS | SEE MORE/LESS ================
+
+  const [visibleReviewCount, setVisibleReviewCount] = useState(4);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showReviewMoreButton, setShowReviewMoreButton] = useState(false);
+  const reviewRef = useRef(null);
+
+  useEffect(() => {
+    if (product?.reviews?.length > 4) {
+      setShowReviewMoreButton(true);
+    }
+  }, [product?.reviews]);
+
+  const handleToggleSeeMore = () => {
+    if (isExpanded) {
+      setVisibleReviewCount(4);
+    } else {
+      setVisibleReviewCount(product.reviews.length);
+    }
+    setIsExpanded(!isExpanded);
+  };
 
   // ================ QUANTITY CONTROL ================
 
@@ -65,7 +215,11 @@ const ProductDetails = () => {
   const [isPaused, setIsPaused] = useState(false);
   const timeoutRef = useRef(null);
 
-  const { isOpen: isModalOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isImageOpen,
+    onOpen: onImageOpen,
+    onOpenChange: onImageOpenChange,
+  } = useDisclosure();
 
   useEffect(() => {
     if (isPaused) return;
@@ -91,18 +245,6 @@ const ProductDetails = () => {
       setIsPaused(false);
     }, 5000);
   };
-
-  // ================ AUTHOR | PUBLISHER ================
-
-  let displayOwner = "";
-
-  if (product.author) {
-    displayOwner = product.author;
-  } else if (product.publisher) {
-    displayOwner = product.publisher;
-  } else {
-    displayOwner = "";
-  }
 
   // ================ DESCRIPTION | READ MORE/LESS | NEW LINE ================
 
@@ -153,28 +295,6 @@ const ProductDetails = () => {
     return `${otherGenres.join(", ")} & ${lastGenre}`;
   };
 
-  // ================ REVIEWS ================
-
-  const [visibleReviewCount, setVisibleReviewCount] = useState(4);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showReviewMoreButton, setShowReviewMoreButton] = useState(false);
-  const reviewRef = useRef(null);
-
-  useEffect(() => {
-    if (product?.reviews?.length > 4) {
-      setShowReviewMoreButton(true);
-    }
-  }, [product?.reviews]);
-
-  const handleToggleSeeMore = () => {
-    if (isExpanded) {
-      setVisibleReviewCount(4);
-    } else {
-      setVisibleReviewCount(product.reviews.length);
-    }
-    setIsExpanded(!isExpanded);
-  };
-
   // =============================================
 
   return (
@@ -185,47 +305,6 @@ const ProductDetails = () => {
         <Fragment>
           <div className="bg-[#A8A1C5] font-roboto min-h-screen py-3">
             <div className="rounded bg-white mx-5 shadow">
-              {/* <section id="breadcrumbs" className="mx-5 pb-3 pt-4"> 
-                <nav
-                  className="flex text-gray-700 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 rounded-lg"
-                  aria-label="Breadcrumb"
-                >
-                  <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
-                    <li className="inline-flex items-center">
-                      <a
-                        href="/"
-                        className="inline-flex items-center text-md font-medium text-gray-700 hover:text-[#51438b] hover:underline dark:text-gray-400 dark:hover:text-white group"
-                      >
-                        <div className="inline-block cursor-pointer">
-                          <i className="bi bi-house mr-1 font-semibold group-hover:hidden"></i>
-                          <i className="bi bi-house-fill mr-1 font-semibold hidden group-hover:inline"></i>
-                        </div>
-                        Home
-                      </a>
-                    </li>
-                    <li>
-                      <div className="flex items-center">
-                        <i className="pi pi-chevron-right mx-1 text-gray-400"></i>
-                        <a
-                          href="/products"
-                          className="inline-flex ms-1 items-center text-md font-medium text-gray-700 hover:text-[#51438b] hover:underline dark:text-gray-400 dark:hover:text-white group"
-                        >
-                          Products
-                        </a>
-                      </div>
-                    </li>             
-                    <li aria-current="page">
-                      <div className="flex items-center">
-                        <i className="pi pi-chevron-right mx-1 text-gray-400"></i>
-                        <span className="ms-1 text-md font-medium text-gray-500 dark:text-gray-400">
-                          {product.name}
-                        </span>
-                      </div>
-                    </li>
-                  </ol>
-                </nav>
-              </section> */}
-
               <section id="productInformation" className="pb-5 pt-1">
                 <div className="flex justify-around items-start">
                   {/* LEFT SIDE | PRODUCT IMAGES */}
@@ -331,7 +410,7 @@ const ProductDetails = () => {
                                   src={image.url}
                                   className={`rounded p-0 object-cover hover:object-scale-down h-[100px] w-[100px] ${
                                     selectedImage === index
-                                      ? "border-2 border-[#51438b]"
+                                      ? "border-2 border-nbTheme"
                                       : "border-1 border-gray-300"
                                   }`}
                                   alt={`Thumbnail ${index + 1}`}
@@ -343,7 +422,7 @@ const ProductDetails = () => {
                             {product.images.length > 3 && (
                               <div
                                 className="w-1/4 p-1 relative cursor-pointer"
-                                onClick={onOpen}
+                                onClick={onImageOpen}
                               >
                                 <div
                                   className="relative border-0 h-[100px] w-[100px] bg-cover bg-center rounded transition-all duration-300 ease-in-out hover:bg-gray-100 hover:brightness-125"
@@ -361,64 +440,62 @@ const ProductDetails = () => {
                         </div>
 
                         {/* Show All Images */}
-                        <>
-                          <Modal
-                            backdrop="blur"
-                            isOpen={isModalOpen}
-                            onOpenChange={onOpenChange}
-                            size="xl"
-                            classNames={{
-                              backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                              base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-                              closeButton:
-                                "hover:bg-white/5 active:bg-white/10",
-                            }}
-                          >
-                            <ModalContent>
-                              {(onClose) => (
-                                <>
-                                  <ModalHeader className="flex justify-center text-white items-center text-xl">
-                                    {product.name}
-                                  </ModalHeader>
-                                  <ModalBody>
-                                    <div className="flex flex-wrap justify-center">
-                                      {product.images.map((image, index) => (
-                                        <div
-                                          key={index}
-                                          className="w-1/4 p-2 cursor-pointer flex justify-center"
-                                          onClick={() => {
-                                            setSelectedImage(index);
-                                            onClose();
-                                            if (timeoutRef.current)
-                                              clearTimeout(timeoutRef.current);
-                                            setTimeout(
-                                              () => setIsPaused(false),
-                                              5000
-                                            );
-                                          }}
-                                        >
-                                          <img
-                                            src={image.url}
-                                            className="rounded w-full h-auto w-max-3/5"
-                                            alt={`Image ${index + 1}`}
-                                          />
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </ModalBody>
-                                  <ModalFooter>
-                                    <Button
-                                      className="bg-[#51438b] text-md font-roboto shadow-lg shadow-indigo-500/20 text-white"
-                                      onPress={onClose}
-                                    >
-                                      Close
-                                    </Button>
-                                  </ModalFooter>
-                                </>
-                              )}
-                            </ModalContent>
-                          </Modal>
-                        </>
+
+                        <Modal
+                          backdrop="blur"
+                          isOpen={isImageOpen}
+                          onOpenChange={onImageOpenChange}
+                          size="xl"
+                          classNames={{
+                            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                            base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                            closeButton: "hover:bg-white/5 active:bg-white/10",
+                          }}
+                        >
+                          <ModalContent>
+                            {(onClose) => (
+                              <>
+                                <ModalHeader className="flex justify-center text-white items-center text-xl">
+                                  {/* {product.name} */}
+                                </ModalHeader>
+                                <ModalBody>
+                                  <div className="flex flex-wrap justify-center">
+                                    {product.images.map((image, index) => (
+                                      <div
+                                        key={index}
+                                        className="w-1/4 p-2 cursor-pointer flex justify-center"
+                                        onClick={() => {
+                                          setSelectedImage(index);
+                                          onClose();
+                                          if (timeoutRef.current)
+                                            clearTimeout(timeoutRef.current);
+                                          setTimeout(
+                                            () => setIsPaused(false),
+                                            5000
+                                          );
+                                        }}
+                                      >
+                                        <img
+                                          src={image.url}
+                                          className="rounded w-full h-auto w-max-3/5"
+                                          alt={`Image ${index + 1}`}
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                  <Button
+                                    className="bg-nbTheme text-md font-roboto shadow-lg shadow-indigo-500/20 text-white"
+                                    onPress={onClose}
+                                  >
+                                    Close
+                                  </Button>
+                                </ModalFooter>
+                              </>
+                            )}
+                          </ModalContent>
+                        </Modal>
                       </div>
                     ) : (
                       /* Display no Image */
@@ -436,8 +513,18 @@ const ProductDetails = () => {
                     <div className="flex items-center justify-between">
                       <div className="w-[75%]">
                         <p className="text-2xl font-bold">{product.name}</p>
-                        <p className="text-gray-500 font-semibold text-xl inline-block">
-                          {displayOwner}
+                        <p
+                          className={`text-lg font-semibold inline-block ${
+                            product.author || product.publisher
+                              ? "text-gray-500"
+                              : "text-red-400"
+                          }`}
+                        >
+                          {product.author
+                            ? `${product.author} (Author)`
+                            : product.publisher
+                            ? `${product.publisher} (Publisher)`
+                            : "`No Author or Publisher`"}
                         </p>
                       </div>
 
@@ -454,33 +541,35 @@ const ProductDetails = () => {
                     </div>
 
                     <div className="flex items-center text-md mt-1">
-                      <span className="me-2 lh-1">
+                      <span className="me-2 text-muted lh-1">
                         {product?.ratings !== undefined
                           ? product.ratings % 1 === 0
                             ? product.ratings.toFixed(0)
                             : product.ratings.toFixed(1)
                           : ""}
                       </span>
-                      <Rating
-                        name="half-rating"
-                        value={product.ratings}
-                        precision={0.1}
-                        sx={{
-                          fontSize: "25px",
-                          lineHeight: "0.8",
-                          marginTop: "-2px",
-                        }}
-                        emptyIcon={
-                          <StarIcon
-                            style={{ opacity: 0.65 }}
-                            fontSize="inherit"
-                          />
-                        }
-                      />
+                      <div onClick={onReviewOpen}>
+                        <Rating
+                          name="half-rating"
+                          value={product.ratings}
+                          precision={0.1}
+                          sx={{
+                            fontSize: "25px",
+                            lineHeight: "0.8",
+                            marginTop: "4px",
+                          }}
+                          emptyIcon={
+                            <StarIcon
+                              style={{ opacity: 0.65 }}
+                              fontSize="inherit"
+                            />
+                          }
+                        />
+                      </div>
 
                       <a
                         href="#reviews"
-                        className="ms-3 lh-1 text-[#51438b] text-md hover:underline"
+                        className="ms-3 lh-1 text-nbTheme text-md hover:underline"
                       >
                         <span>
                           {product.numOfReviews === 0
@@ -516,7 +605,7 @@ const ProductDetails = () => {
                       <div className="flex justify-end">
                         <span
                           onClick={() => setIsOpen(!isOpen)}
-                          className="text-[#51438b] text-md cursor-pointer hover:underline"
+                          className="text-nbTheme text-md cursor-pointer hover:underline"
                         >
                           {isOpen ? "Read Less" : "Read More"}
                         </span>
@@ -530,7 +619,7 @@ const ProductDetails = () => {
                       </p>
                     )}
 
-                    {product.publisher && (
+                    {product.author && product.publisher && (
                       <p className="pt-1 text-md">
                         <span className="font-bold">Publisher:</span>{" "}
                         {product.publisher}
@@ -591,7 +680,7 @@ const ProductDetails = () => {
                     <div className="flex items-center justify-center mt-3">
                       <button
                         className={`text-white text-center text-md font-bold rounded py-2 pointer w-[70%] hover:bg-[#3e326e] transition-all duration-300 ${
-                          product.stock === 0 ? "bg-opacity-50" : "bg-[#51438b]"
+                          product.stock === 0 ? "bg-opacity-50" : "bg-nbTheme"
                         }`}
                         onClick={addToCart}
                         disabled={product.stock === 0}
@@ -603,8 +692,139 @@ const ProductDetails = () => {
                 </div>
               </section>
               <section id="reviews" className="mx-5 mt-5 pb-5">
-                <div className="mb-2">
-                  <p className="text-lg font-semibold">Recent Reviews</p>
+                <div className="mb-2 flex justify-between items-center">
+                  <p className="text-lg font-semibold">
+                    {product && product.reviews && product.reviews.length > 0
+                      ? "Recent Reviews"
+                      : "Product Reviews"}
+                  </p>
+
+                  <Popover placement="top-end" offset={20}>
+                    <PopoverTrigger>
+                      <Button
+                        onClick={user ? onReviewOpen : undefined}
+                        className="text-md px-3 py-2 flex items-center cursor-pointer rounded bg-nbTheme text-white transition-all duration-300 relative hover:bg-[#3e326e]"
+                      >
+                        Review Product
+                        <i className="pi pi-pen-to-square"></i>
+                      </Button>
+                    </PopoverTrigger>
+                    {!user && (
+                      <PopoverContent className="bg-nbTheme text-white">
+                        <div className="px-2 py-2">
+                          <div className="text-md font-roboto  font-bold">
+                            Login Required!
+                          </div>
+                          <div className="text-sm">
+                            Please login to leave a review.
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    )}
+                  </Popover>
+
+                  <Modal
+                    backdrop="blur"
+                    isOpen={isReviewOpen}
+                    onClose={onReviewAlwaysClose}
+                    size="xl"
+                    classNames={{
+                      backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                      base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                      closeButton: "hover:bg-white/5 active:bg-white/10",
+                    }}
+                  >
+                    <ModalContent>
+                      {(onReviewAlwaysClose) => (
+                        <>
+                          <ModalHeader className="flex flex-col gap-1 text-white">
+                            Submit Your Review
+                          </ModalHeader>
+                          <ModalBody>
+                            <p className="text-[#a8b0d3]">
+                              We value your feedback on our products. Please
+                              share your thoughts, as your insights help us
+                              improve and better serve our community. Your
+                              reviews are essential in ensuring a great
+                              experience for everyone.
+                            </p>
+
+                            <div className="flex justify-center items-center space-x-2">
+                              <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="5"
+                                value={hover !== -1 ? hover : ratingValue || ""}
+                                onChange={handleInputChange}
+                                className="text-2xl text-[#a8b0d3] w-[15%] rounded bg-[#19172c] p-1 text-center"
+                              />
+
+                              <Rating
+                                name="hover-feedback"
+                                value={ratingValue}
+                                defaultValue={0}
+                                precision={0.1}
+                                onChange={handleRatingChange}
+                                onChangeActive={handleHoverChange}
+                                sx={{
+                                  fontSize: "40px",
+                                  lineHeight: "0.8",
+                                }}
+                                emptyIcon={
+                                  <StarIcon
+                                    style={{ color: "#a8b0d3" }}
+                                    fontSize="inherit"
+                                  />
+                                }
+                              />
+                            </div>
+                            <textarea
+                              value={comment}
+                              onChange={handleCommentChange}
+                              className="w-full h-40 p-2 border border-gray-300 rounded bg-[#19172c] text-[#a8b0d3] focus:outline-none focus:border-[#51438b]"
+                              placeholder="Write your review here..."
+                            />
+                          </ModalBody>
+                          <ModalFooter>
+                            <Button
+                              className="text-white font-roboto text-md"
+                              variant="light"
+                              onPress={onReviewAlwaysClose}
+                            >
+                              Close
+                            </Button>
+                            <Button
+                              className="bg-nbTheme text-md font-roboto shadow-lg shadow-indigo-500/20 text-white"
+                              onPress={() => {
+                                if (
+                                  ratingValue === 0 &&
+                                  comment.trim() === ""
+                                ) {
+                                  toast.error(
+                                    "Please provide a rating and comment before submitting."
+                                  );
+                                } else if (ratingValue === 0) {
+                                  toast.error(
+                                    "Please provide a rating before submitting."
+                                  );
+                                } else if (comment.trim() === "") {
+                                  toast.error(
+                                    "Please provide a comment before submitting."
+                                  );
+                                } else {
+                                  reviewHandler();
+                                  onReviewAlwaysClose();
+                                }
+                              }}
+                            >
+                              Submit Review
+                            </Button>
+                          </ModalFooter>
+                        </>
+                      )}
+                    </ModalContent>
+                  </Modal>
                 </div>
                 <hr className="border-gray-600" />
                 <div className="w-full">
@@ -634,7 +854,7 @@ const ProductDetails = () => {
                           <hr className="flex-grow border-t border-gray-600" />
                           <span
                             onClick={handleToggleSeeMore}
-                            className="text-[#51438b] text-md cursor-pointer hover:underline px-4"
+                            className="text-nbTheme text-md cursor-pointer hover:underline px-4"
                           >
                             {isExpanded ? "See Less" : "See More"}
                           </span>
@@ -643,7 +863,15 @@ const ProductDetails = () => {
                       )}
                     </>
                   ) : (
-                    <p>No reviews yet.</p>
+                    <div className="mt-3 bg-nbTheme rounded p-3 border-1 border-[#3e326e]">
+                      <p className="text-white">
+                        We appreciate your interest in our product. Please note
+                        that this product is new and has not yet garnered any
+                        reviews. However, we are confident in its quality and
+                        believe it offers great value. If you choose to make a
+                        purchase, we would be eager to receive your feedback.
+                      </p>
+                    </div>
                   )}
                 </div>
               </section>

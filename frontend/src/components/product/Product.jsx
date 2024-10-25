@@ -69,11 +69,12 @@ const Product = ({ product }) => {
               precision={0.1}
               sx={{
                 fontSize: "20px",
-                lineHeight: "0.9",
+                lineHeight: "0.8",
               }}
               emptyIcon={
                 <StarIcon style={{ opacity: 0.55 }} fontSize="inherit" />
               }
+              readOnly
             />
             <p className="mb-0 text-gray-500 text-sm">
               {product.numOfReviews === 0
@@ -89,17 +90,23 @@ const Product = ({ product }) => {
           <p className="mb-0 text-lg px-1 pt-1 font-bold truncate w-full">
             {product.name}
           </p>
-          <p className="text-gray-600 text-sm px-1 pb-1 font-semibold mb-0 truncate w-full">
-            {product.author}
+          <p
+            className={`text-sm px-1 pb-1 font-semibold mb-0 truncate w-full ${
+              product.author || product.publisher
+                ? "text-gray-600"
+                : "text-red-400"
+            }`}
+          >
+            {product.author || product.publisher || "`No Author or Publisher`"}
           </p>
 
           <div className="w-full flex gap-1 mt-2">
-            <button className="bg-[#51438b] text-white h-8 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
+            <button className="bg-nbTheme text-white h-8 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
               Add to Cart
             </button>
             <Link
               to={`product/${product._id}`}
-              className="bg-[#51438b] text-white h-8 flex justify-center items-center w-14 rounded-md hover:bg-[#3e326e] transition-all duration-300"
+              className="bg-nbTheme text-white h-8 flex justify-center items-center w-14 rounded-md hover:bg-[#3e326e] transition-all duration-300"
             >
               <i className="pi pi-info-circle text-md"></i>
             </Link>
