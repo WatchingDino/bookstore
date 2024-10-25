@@ -46,29 +46,6 @@ const Header = () => {
 
         <div className="w-2/3 text-center">
           <ul className="flex justify-center space-x-4">
-            {/* <li>
-              <Link className="text-white hover:underline" to="/">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link className="text-white hover:underline" to="/products">
-                Products
-              </Link>
-            </li> */}
-            {/* 
-            <li>
-              <Link className="text-white hover:underline" to="/orders/me">
-                Orders
-              </Link>
-            </li>
-            <li>
-              <Link className="text-white hover:underline" to="/dashboard">
-                Dashboard
-              </Link>
-            </li>
-            */}
-
             <nav className="flex text-white rounded-lg" aria-label="Breadcrumb">
               <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
                 <li className="inline-flex items-center">
@@ -103,6 +80,17 @@ const Header = () => {
                     </span>
                   </div>
                 </li>
+
+                {/* <li>
+                  <Link className="text-white hover:underline" to="/orders/me">
+                    Orders
+                  </Link>
+                </li>
+                <li>
+                  <Link className="text-white hover:underline" to="/dashboard">
+                    Dashboard
+                  </Link>
+                </li> */}
               </ol>
             </nav>
           </ul>
@@ -115,7 +103,7 @@ const Header = () => {
               <Link
                 type="button"
                 id="dropDownMenuButton"
-                data-bs-toggle="dropdown" // Keep this if using Bootstrap JS for dropdown
+                data-bs-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
                 className="cursor-pointer"
