@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, clearErrors } from "../../actions/userActions";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Input } from "@nextui-org/react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -34,122 +35,65 @@ const Login = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.leftPanel}>
-        <h1 style={styles.heading}>Login Account</h1>
-        <form onSubmit={submitHandler} style={styles.form}>
-          <input
+    <div className="flex w-[70%] h-[500px] my-[50px] mx-auto shadow-lg rounded-lg overflow-hidden font-roboto">
+      <div className="flex-1 flex flex-col items-center justify-center bg-white p-5">
+        <p className="text-2xl mb-4 font-bold">Login Account</p>
+        <form
+          onSubmit={submitHandler}
+          className="w-4/5 flex flex-col items-center"
+        >
+          <Input
+            labelPlacement="outside"
+            variant="bordered"
+            radius="sm"
             type="email"
-            placeholder="Email"
+            label="Email"
             value={email}
+            size="md"
             onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
+            className="mb-3 font-bold"
           />
-          <input
+          <Input
+            labelPlacement="outside"
+            variant="bordered"
+            radius="sm"
             type="password"
-            placeholder="Password"
+            label="Password"
             value={password}
+            size="md"
             onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
+            className="mb-2 font-bold"
           />
-          <Link to="/password/forgot" style={styles.forgotLink}>
+          <Link
+            to="/password/forgot"
+            className="self-end mb-4 hover:underline text-nbTheme text-sm font-bold"
+          >
             Forgot your password?
           </Link>
-          <button type="submit" style={styles.signInButton}>
+          <button
+            type="submit"
+            className="w-full py-2 bg-nbTheme hover:bg-nbDarkTheme text-white rounded font-bold text-lg cursor-pointer"
+          >
             Login
           </button>
         </form>
       </div>
 
-      <div style={styles.rightPanel}>
-        <h1 style={styles.heading}>Lorem Ipsum</h1>
-        <p style={styles.paragraph}>
-        Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      <div className="flex-1 flex flex-col items-center justify-center p-5 bg-gradient-to-r from-nbTheme to-[#6e629e] text-white">
+        <p className="text-2xl mb-4 font-bold">Don't have an accountt?</p>
+        <p className="text-center mb-4">
+          Create an account to gain access to exclusive offers and explore our
+          amazing collection.
         </p>
-        <Link to="/register" style={styles.signUpButton}>
+        <Link
+          to="/register"
+          className="py-2 px-4 border-2 border-white bg-inherit font-bold text-lg text-white rounded cursor-pointer"
+        >
           Sign-up
         </Link>
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    width: "70%",
-    height: "500px",
-    margin: "100px auto",
-    boxShadow: "0 4px 18px 5px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
-    overflow: "hidden",
-  },
-  leftPanel: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    padding: "20px",
-  },
-  rightPanel: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "linear-gradient(to right, #51438b, #6e629e)",
-    color: "#fff",
-    padding: "20px",
-    backgroundColor: "#4195d3",
-  },
-  heading: {
-    fontSize: "2rem",
-    marginBottom: "20px",
-  },
-  form: {
-    width: "80%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  forgotLink: {
-    alignSelf: "flex-end",
-    marginBottom: "20px",
-    textDecoration: "underline",
-    color: "#51438b",
-  },
-  signInButton: {
-    width: "100%", 
-    padding: "10px 20px",
-    backgroundColor: "#51438b",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  paragraph: {
-    fontSize: "1rem",
-    textAlign: "center",
-    marginBottom: "20px",
-  },
-  signUpButton: {
-    padding: "10px 20px",
-    backgroundColor: "transparent",
-    border: "2px solid #fff",
-    color: "#fff",
-    borderRadius: "5px",
-    textDecoration: "none",
-    cursor: "pointer",
-  },
 };
 
 export default Login;

@@ -41,7 +41,7 @@ const Home = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div className="bg-[#A8A1C5] pt-1">
+          <div className="bg-nbLightTheme pt-1">
             <section id="search" className="px-32">
               <div className="container shadow bg-white rounded h-[40px] mt-4 flex justify-center items-center">
                 Search

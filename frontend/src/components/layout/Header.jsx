@@ -51,30 +51,33 @@ const Header = () => {
                 <li className="inline-flex items-center">
                   <a
                     href="/"
-                    className="inline-flex items-center text-md font-medium text-white hover:underline group"
+                    className="relative inline-flex items-center text-md font-medium text-white group"
                   >
                     Home
+                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
                   </a>
                 </li>
                 <li className="">
                   <div className="flex items-center">
-                    {location.pathname !== "/" && (
+                    {location.pathname.startsWith("/product/") && (
                       <i className="pi pi-chevron-right text-white"></i>
                     )}
 
                     <a
                       href={location.pathname === "/" ? "/" : "/products"}
-                      className="inline-flex ms-1 items-center text-md font-medium text-white hover:underline group"
+                      // href={"/products"}
+                      className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
                     >
                       Products
+                      <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
                     </a>
                   </div>
                 </li>
-                {location.pathname !== "/" && (
+                {location.pathname.startsWith("/product/") && (
                   <li className="" aria-current="page">
                     <div className="flex items-center">
-                      <i className="pi pi-chevron-right text-[#A8A1C5]"></i>
-                      <span className="ms-1 text-md font-medium text-[#A8A1C5]">
+                      <i className="pi pi-chevron-right text-nbLightTheme"></i>
+                      <span className="ms-1 text-md font-medium text-nbLightTheme">
                         {productName}
                       </span>
                     </div>
@@ -82,15 +85,15 @@ const Header = () => {
                 )}
 
                 {/* <li>
-                  <Link className="text-white hover:underline" to="/orders/me">
-                    Orders
-                  </Link>
-                </li>
-                <li>
-                  <Link className="text-white hover:underline" to="/dashboard">
-                    Dashboard
-                  </Link>
-                </li> */}
+                    <Link className="text-white hover:underline" to="/orders/me">
+                      Orders
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="text-white hover:underline" to="/dashboard">
+                      Dashboard
+                    </Link>
+                  </li> */}
               </ol>
             </nav>
           </ul>

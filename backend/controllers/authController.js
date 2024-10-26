@@ -27,29 +27,32 @@ exports.registerUser = async (req, res, next) => {
       public_id: result.public_id,
       url: result.secure_url,
     },
-
   });
   sendToken(user, 200, res);
 };
 
 exports.loginUser = async (req, res, next) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
-    return next(new ErrorHandler("Please enter email & password", 400));
+    return next(new ErrorHandler("Please Enter your Email and Password!", 400));
   }
 
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    return next(new ErrorHandler("Invalid Email or Password", 401));
+    return next(new ErrorHandler("Invalid Email Address. Please verify your credentials and try again.", 401));
   }
+  
   const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHandler("Invalid Email or Password", 401));
+    return next(new ErrorHandler("Invalid Password. Please ensure that your password is correct.", 401));
   }
+
   sendToken(user, 200, res);
 };
+
 
 exports.logout = async (req, res, next) => {
   res.cookie("token", null, {
