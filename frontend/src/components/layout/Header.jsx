@@ -66,32 +66,46 @@ const Header = () => {
                     <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
                   </a>
                 </li>
-                <li className="">
-                  <div className="flex items-center">
-                    {location.pathname.startsWith("/product/") && (
-                      <i className="pi pi-chevron-right text-white"></i>
-                    )}
+                <li className="flex items-center">
+                  {location.pathname.startsWith("/product/") && (
+                    <i className="pi pi-chevron-right text-white"></i>
+                  )}
 
-                    <a
-                      href={location.pathname === "/" ? "/" : "/products"}
-                      // href={"/products"}
-                      className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
-                    >
-                      Products
-                      <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
-                    </a>
-                  </div>
+                  <a
+                    href={location.pathname === "/" ? "/" : "/products"}
+                    // href={"/products"}
+                    className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
+                  >
+                    Products
+                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+                  </a>
                 </li>
                 {location.pathname.startsWith("/product/") && (
-                  <li className="" aria-current="page">
-                    <div className="flex items-center">
-                      <i className="pi pi-chevron-right text-nbLightTheme"></i>
-                      <span className="ms-1 text-md font-medium text-nbLightTheme">
-                        {productName}
-                      </span>
-                    </div>
+                  <li className="flex items-center pr-4" aria-current="page">
+                    <i className="pi pi-chevron-right text-nbLightTheme"></i>
+                    <span className="ms-1 text-md font-medium text-nbLightTheme">
+                      {productName}
+                    </span>
                   </li>
                 )}
+                <li className="flex items-center">
+                  <a
+                    href="/#aboutUs"
+                    className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
+                  >
+                    About Us
+                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+                  </a>
+                </li>
+                <li className="flex items-center">
+                  <a
+                    href="/#contactInfo"
+                    className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
+                  >
+                    Contact Info
+                    <span className="absolute left-0 bottom-0 w-full h-0.5 bg-white transform scale-x-0 transition-transform duration-300 group-hover:scale-x-100" />
+                  </a>
+                </li>
                 {/* 
                   <li>
                     <Link className="text-white hover:underline" to="/dashboard">

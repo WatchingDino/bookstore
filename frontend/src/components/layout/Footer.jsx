@@ -3,94 +3,116 @@ import React, { Fragment } from "react";
 const Footer = () => {
   return (
     <Fragment>
-      <footer
-        className="footer py-2"
-        style={{
-          backgroundColor: "#51438b",
-          color: "#171717",
-        }}
-      >
-        <div
-          className="container"
-          style={{ fontFamily: "'Lucida Bright', serif" }}
-        >
-          <div className="row align-items-center">
-            {/* Logo Section */}
-            <div className="col-md-3 d-flex justify-content-center mb-3">
+      <footer className="py-2 bg-nbTheme">
+        <div className="container mx-auto py-5 font-roboto text-md text-black">
+          <div className="flex flex-wrap items-center justify-center pb-5">
+            <div className="w-full md:w-1/3 flex justify-center mb-3">
               <img
                 src="https://res.cloudinary.com/dfxyjskzh/image/upload/v1725391050/national_diaries_logo_ra1noc.png"
-                alt="National_Diaries_Logo"
-                style={{ width: "250px" }}
+                alt="National Diaries Logo"
+                className="w-64"
               />
             </div>
 
-            {/* extra */}
-            <div className="col-md-3 d-flex justify-content-center">
-              <div>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-              </div>
+            <div className="w-full md:w-1/3 block text-center">
+              <p className="text-2xl font-bold pb-2 font-serif ">
+                National Diaries
+              </p>
+              <p className="">
+                National Diaries is a specialty retailer offering a curated
+                selection of diaries, novels, planners, and other literary
+                essentials. Our mission is to provide high-quality, stylish, and
+                functional products for readers, writers, and anyone who values
+                thoughtful organization. Each item is carefully chosen to
+                inspire creativity, encourage planning, and make daily life more
+                enjoyable. With National Diaries, you’ll find the perfect tools
+                for capturing memories, setting goals, and exploring new
+                stories.
+              </p>
             </div>
 
-            {/* extra */}
-            <div className="col-md-3 d-flex justify-content-center">
-              <div>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-              </div>
-            </div>
+            <div className="w-full md:w-1/3 text-center font-bold">
+              <a
+                href="#learnMore"
+                className="flex items-center justify-center group mb-1"
+              >
+                <p className="inline-block relative">
+                  Explore Our Offerings!
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                </p>
+              </a>
+              <a
+                href="#joinCommunity"
+                className="flex items-center justify-center group mb-1"
+              >
+                <p className="inline-block relative">
+                  Join Our Community
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                </p>
+              </a>
+              <a
+                href="#aboutUs"
+                className="flex items-center justify-center group mb-3"
+              >
+                <p className="inline-block relative">
+                  About Us
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black transform scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+                </p>
+              </a>
 
-            {/* extra */}
-            <div className="col-md-3 d-flex justify-content-center">
-              <div>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
-                <a href="#extra" style={{ color: "#171717" }}>
-                  <h5>extra</h5>
-                </a>
+              <div className="flex items-center justify-center mb-2">
+                <p className="inline-block relative">
+                  Contact Us:
+                  <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black transform scale-x-100 transition-transform duration-300 ease-in-out"></span>
+                </p>
+              </div>
+
+              <div className="flex items-center justify-center mb-1">
+                <i className="pi pi-inbox pr-2 text-xl" />
+                <p className="inline-block relative">
+                  national.diaries2024@gmail.com
+                </p>
+              </div>
+
+              <div className="flex items-center justify-center mb-1">
+                <i className="pi pi-phone pr-2 text-xl" />
+                <div className="flex flex-col">
+                  <p className="inline-block relative">(+63) 987-6543-210</p>
+                  <p className="inline-block relative"> (+63 2) 8765-4321</p>
+                </div>
               </div>
             </div>
           </div>
-          <hr />
-          <div className="text-center" style={{ marginTop: "80px" }}>
+
+          <hr className="mx-24" />
+
+          <div className="text-center mt-5">
             <a
-              href="#facebook"
-              style={{ color: "#171717", margin: "0 10px", fontSize: "32px" }}
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-2 text-3xl"
             >
-              <i className="pi pi-facebook"></i>
+              <i className="pi pi-facebook" />
             </a>
             <a
-              href="#instagram"
-              style={{ color: "#171717", margin: "0 10px", fontSize: "32px" }}
+              href="https://www.instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-2 text-3xl"
             >
-              <i className="pi pi-instagram"></i>
+              <i className="pi pi-instagram" />
             </a>
             <a
-              href="#github"
-              style={{ color: "#171717", margin: "0 10px", fontSize: "32px" }}
+              href="https://www.github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mx-2 text-3xl"
             >
-              <i className="pi pi-github"></i>
+              <i className="pi pi-github" />
             </a>
 
-            <p style={{ marginTop: "10px", fontWeight: "bold" }}>
+            <p className="mt-2 font-bold">
               ©2024 National Diaries. All rights reserved.
             </p>
           </div>
