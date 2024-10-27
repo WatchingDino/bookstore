@@ -3,6 +3,15 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/userActions";
 import { getProductDetails } from "../../actions/productActions";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownSection,
+  DropdownItem,
+  Button,
+  User,
+} from "@nextui-org/react";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -33,8 +42,8 @@ const Header = () => {
 
   return (
     <Fragment>
-      <nav className="flex items-center justify-between px-5 py-2 bg-nbTheme">
-        <div className="flex items-center w-1/6">
+      <nav className="flex items-center justify-between px-5 py-2 bg-nbTheme font-roboto">
+        <div className="flex items-center">
           <Link to="/">
             <img
               src="https://res.cloudinary.com/dfxyjskzh/image/upload/v1725723067/national_diaries_logo_trim_avdp5r.png"
@@ -44,7 +53,7 @@ const Header = () => {
           </Link>
         </div>
 
-        <div className="w-2/3 text-center">
+        <div className="text-center">
           <ul className="flex justify-center space-x-4">
             <nav className="flex text-white rounded-lg" aria-label="Breadcrumb">
               <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
@@ -83,12 +92,7 @@ const Header = () => {
                     </div>
                   </li>
                 )}
-
-                {/* <li>
-                    <Link className="text-white hover:underline" to="/orders/me">
-                      Orders
-                    </Link>
-                  </li>
+                {/* 
                   <li>
                     <Link className="text-white hover:underline" to="/dashboard">
                       Dashboard
@@ -99,67 +103,126 @@ const Header = () => {
           </ul>
         </div>
 
-        <div className="w-1/6 text-right">
+        <div className="">
           {user ? (
-            <div className="relative inline-flex items-center justify-end">
-              <span className="text-white mr-2">{user.name}</span>
-              <Link
-                type="button"
-                id="dropDownMenuButton"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                className="cursor-pointer"
+            //     {user.role === "admin" && (
+            //       <Link
+            //         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+            //         to="/dashboard"
+            //       >
+            //         Dashboard
+            //       </Link>
+            //     )}
+            <div className="">
+              <Dropdown
+                placement="bottom-end"
+                showArrow
+                radius="sm"
+                classNames={{
+                  base: "before:bg-white",
+                  content: "p-0 border-small border-divider bg-white",
+                }}
               >
-                <figure className="avatar">
-                  <img
-                    src={user.avatar && user.avatar.url}
-                    alt={user.name}
-                    className="rounded-full border-2 border-white w-10 h-10"
-                  />
-                </figure>
-              </Link>
-              <div
-                className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20"
-                aria-labelledby="dropDownMenuButton"
-              >
-                {user.role === "admin" && (
-                  <Link
-                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    to="/dashboard"
+                <DropdownTrigger>
+                  <Button
+                    className="text-white font-bold text-sm rounded"
+                    variant="ghost"
+                    disableRipple
                   >
-                    Dashboard
-                  </Link>
-                )}
-                <Link
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  to="/orders/me"
+                    Profile
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="User Actions"
+                  variant="flat"
+                  disabledKeys={["profile"]}
+                  className="p-2"
+                  itemClasses={{
+                    base: [
+                      "rounded-md",
+                      "text-default-500",
+                      "transition-opacity",
+                      "data-[hover=true]:text-foreground",
+                      "data-[hover=true]:bg-default-100",
+                      "dark:data-[hover=true]:bg-default-50",
+                      "data-[selectable=true]:focus:bg-default-50",
+                      "data-[pressed=true]:opacity-70",
+                      "data-[focus-visible=true]:ring-default-500",
+                    ],
+                  }}
                 >
-                  Orders
-                </Link>
-                <Link
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                  to="/me"
-                >
-                  Profile
-                </Link>
-                <hr className="my-1 border-t border-gray-300" />
-                <Link
-                  className="block px-4 py-2 text-red-500 hover:bg-gray-100"
-                  to="/"
-                  onClick={logoutHandler}
-                >
-                  Logout
-                </Link>
-              </div>
+                  <DropdownSection aria-label="Profile & Orders" showDivider>
+                    <DropdownItem
+                      isReadOnly
+                      key="profile"
+                      className="h-14 gap-2 opacity-100"
+                    >
+                      <User
+                        name={`${user.firstName} ${user.lastName}`}
+                        description={user.email}
+                        classNames={{
+                          name: "text-black font-bold font-roboto",
+                          description: "text-gray-600 font-bold font-roboto",
+                        }}
+                        avatarProps={{
+                          size: "sm",
+                          src: user.avatar
+                            ? user.avatar.url
+                            : "https://res.cloudinary.com/dfxyjskzh/image/upload/v1725499896/Blank-Profile-Picture_ebngxw.webp",
+                        }}
+                      />
+                    </DropdownItem>
+                    <DropdownItem
+                      key="personalInformation"
+                      href="/me"
+                      description="Edit Personal Information"
+                      startContent={<i className="pi pi-user-edit text-xl" />}
+                      classNames={{
+                        title: "pl-1 font-bold font-roboto",
+                        description: "pl-1 font-bold font-roboto text-gray-600",
+                      }}
+                    >
+                      Customize Profile
+                    </DropdownItem>
+                    <DropdownItem
+                      key="orders"
+                      href="/orders/me"
+                      description="View my Orders"
+                      startContent={<i className="pi pi-box text-xl" />}
+                      classNames={{
+                        title: "pl-1 font-bold font-roboto",
+                        description: "pl-1 font-bold font-roboto text-gray-600",
+                      }}
+                    >
+                      Orders
+                    </DropdownItem>
+                  </DropdownSection>
+                  <DropdownSection aria-label="Logout Account">
+                    <DropdownItem
+                      onClick={logoutHandler}
+                      color="danger"
+                      className="text-danger"
+                      startContent={<i className="pi pi-sign-out text-xl" />}
+                      classNames={{
+                        title: "pl-1 font-bold font-roboto",
+                      }}
+                    >
+                      Log Out
+                    </DropdownItem>
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           ) : (
             !loading && (
-              <Link
-                to="/login"
-                className="text-white text-center text-sm font-bold rounded border-2 px-4 py-2 pointer"
-              >
-                Login
+              <Link to="/login">
+                <Button
+                  className="text-white font-bold text-sm rounded"
+                  variant="ghost"
+                  disableRipple
+                >
+                  Login
+                </Button>
               </Link>
             )
           )}

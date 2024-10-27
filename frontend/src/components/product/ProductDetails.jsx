@@ -60,7 +60,7 @@ const ProductDetails = () => {
     }
     if (success) {
       successMsg("Review Posted Successfully");
-      dispatch({ type: NEW_REVIEW_RESET });   
+      dispatch({ type: NEW_REVIEW_RESET });
     }
   }, [dispatch, alert, error, reviewError, success, id]);
 
@@ -350,7 +350,7 @@ const ProductDetails = () => {
                                 <img
                                   src={image.url}
                                   className="w-full h-[550px] object-scale-down rounded"
-                                  alt={`Slide ${index + 1}`}
+                                  alt={`${product.name} Image`}
                                 />
                               </div>
                             ))}
@@ -413,7 +413,7 @@ const ProductDetails = () => {
                                       ? "border-2 border-nbTheme"
                                       : "border-1 border-gray-300"
                                   }`}
-                                  alt={`Thumbnail ${index + 1}`}
+                                  alt={`${product.name} Thumbnail`}
                                   onClick={() => handleThumbnailClick(index)}
                                 />
                               </div>
@@ -478,7 +478,7 @@ const ProductDetails = () => {
                                         <img
                                           src={image.url}
                                           className="rounded w-full h-auto w-max-3/5"
-                                          alt={`Image ${index + 1}`}
+                                          alt={`${product.name} Image`}
                                         />
                                       </div>
                                     ))}

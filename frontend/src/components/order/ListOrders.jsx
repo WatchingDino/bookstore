@@ -77,13 +77,14 @@ const ListOrders = () => {
       {loading ? (
         <Loader />
       ) : (
-        <MDBDataTable
-          data={setOrders()}
-          className="px-3"
-          bordered
-          striped
-          hover
-        />
+        <div></div>
+        // <MDBDataTable
+        //   data={setOrders()}
+        //   className="px-3"
+        //   bordered
+        //   striped
+        //   hover
+        // />
       )}
     </Fragment>
   );

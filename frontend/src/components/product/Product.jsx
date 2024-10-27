@@ -39,7 +39,7 @@ const Product = ({ product }) => {
           <img
             className="rounded-t-lg w-full h-64 object-cover"
             src={product.images[currentImageIndex].url}
-            alt="Product"
+            alt={`${product.name} Image`}
           />
         </Link>
 

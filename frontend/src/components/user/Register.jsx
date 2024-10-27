@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../actions/userActions";
 import { Input } from "@nextui-org/react";
-import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -167,7 +166,7 @@ const Register = () => {
                 required
                 startContent={
                   <div className="pointer-events-none flex items-center">
-                    <AttachFileIcon />
+                    <i className="pi pi-file"/>
                   </div>
                 }
               />

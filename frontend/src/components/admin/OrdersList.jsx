@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-// import { MDBDataTable } from "mdbreact";
+import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layout/MetaData";
 
@@ -161,13 +161,14 @@ const OrdersList = () => {
             {loading ? (
               <Loader />
             ) : (
-              <MDBDataTable
-                data={setOrders()}
-                className="px-3"
-                bordered
-                striped
-                hover
-              />
+              // <MDBDataTable
+              //   data={setOrders()}
+              //   className="px-3"
+              //   bordered
+              //   striped
+              //   hover
+              // />
+              <div></div>
             )}
           </Fragment>
         </div>

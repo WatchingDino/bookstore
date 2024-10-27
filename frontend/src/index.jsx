@@ -10,7 +10,8 @@ import "./index.css";
 import { ToastContainer } from "react-toastify";
 
 import { NextUIProvider } from "@nextui-org/react";
-import "../node_modules/primeicons/primeicons.css";
+import 'primeicons/primeicons.css';
+
 // import "primereact/resources/themes/lara-light-cyan/theme.css";
 // import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 // import "@fortawesome/fontawesome-free/css/all.min.css";
