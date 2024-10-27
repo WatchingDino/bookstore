@@ -1,8 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import MetaData from "../layout/MetaData";
 import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../actions/userActions";
+import { Input } from "@nextui-org/react";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -68,186 +69,121 @@ const Register = () => {
 
   return (
     <Fragment>
-      <MetaData title={"Register User"} />
-
-      <div style={styles.container}>
-        <div style={styles.leftPanel}>
-          <h1 style={styles.heading}>Lorem Ipsum</h1>
-          <p style={styles.paragraph}>
-            Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut
-            labore et dolore magna aliqua.
+      <div className="flex w-[70%] h-[500px] my-[50px] mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
+        <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-r from-[#6e629e] to-nbDarkTheme text-white p-5">
+          <p className="text-2xl mb-4">Welcome Back!</p>
+          <p className="text-center mb-4 font-normal">
+            Log in to pick up right where you left off and enjoy easy access to
+            your account and current offers.
           </p>
-          <Link to="/login" style={styles.signInButton}>
+          <Link
+            to="/login"
+            className="py-2 px-4 border-2 border-white bg-inherit text-lg text-white rounded cursor-pointer"
+          >
             Login
           </Link>
         </div>
 
-        <div style={styles.rightPanel}>
-          <h1 style={styles.heading}>Create Account</h1>
-          <form onSubmit={submitHandler} style={styles.form}>
-            <div style={styles.row}>
-              <input
+        <div className="flex-1 flex flex-col items-center justify-center bg-white p-5">
+          <p className="text-2xl mb-4">Create an Account</p>
+          <form
+            onSubmit={submitHandler}
+            className="w-4/5 flex flex-col items-center"
+          >
+            <div className="flex w-full justify-between mb-3">
+              <Input
+                labelPlacement="inside"
+                variant="bordered"
+                radius="sm"
                 type="text"
-                placeholder="First Name"
+                label="First Name"
                 name="firstName"
                 value={firstName}
+                size="md"
                 onChange={onChange}
-                style={styles.inputHalf}
+                className="pr-1"
+                isRequired
+                required
               />
-              <input
+              <Input
+                labelPlacement="inside"
+                variant="bordered"
+                radius="sm"
                 type="text"
-                placeholder="Last Name"
+                label="Last Name"
                 name="lastName"
                 value={lastName}
+                size="md"
                 onChange={onChange}
-                style={styles.inputHalf}
+                className="pl-1"
+                isRequired
+                required
               />
             </div>
-            <input
-              type="email"
-              placeholder="Email"
+            <Input
+              labelPlacement="inside"
+              variant="bordered"
+              radius="sm"
+              type="text"
+              label="Email"
               name="email"
               value={email}
+              size="md"
               onChange={onChange}
-              style={styles.input}
+              className="mb-3"
+              isRequired
+              required
             />
-            <input
-              type="password"
-              placeholder="Password"
+            <Input
+              labelPlacement="inside"
+              variant="bordered"
+              radius="sm"
+              type="text"
+              label="Password"
               name="password"
               value={password}
+              size="md"
               onChange={onChange}
-              style={styles.input}
+              className="mb-3"
+              isRequired
+              required
             />
-            <div style={styles.fileInputContainer}>
-              <img
-                src={avatarPreview}
-                alt="Avatar Preview"
-                style={styles.avatarPreview}
-              />
-              <input
+            <div className="flex items-center justify-between w-full mb-4">
+              <div className="flex justify-center items-center w-1/4">
+                <img
+                  src={avatarPreview}
+                  alt="Avatar Preview"
+                  className="w-[50px] h-[50px] rounded-full object-cover object-center border border-gray-400"
+                />
+              </div>
+              <Input
+                variant="bordered"
+                radius="sm"
                 type="file"
                 name="avatar"
                 accept="image/*"
                 onChange={onChange}
-                style={styles.fileInput}
+                className="w-3/4 p-0"
+                required
+                startContent={
+                  <div className="pointer-events-none flex items-center">
+                    <AttachFileIcon />
+                  </div>
+                }
               />
             </div>
             <button
               type="submit"
-              style={styles.signUpButton}
+              className="w-full py-2 bg-nbTheme hover:bg-nbDarkTheme text-white rounded text-lg cursor-pointer"
               disabled={loading}
             >
-              Create Account
+              {loading ? "Creating an Account..." : "Create Account"}
             </button>
           </form>
         </div>
       </div>
     </Fragment>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    width: "70%",
-    height: "500px",
-    margin: "100px auto",
-    boxShadow: "0 4px 18px 5px rgba(0, 0, 0, 0.1)",
-    borderRadius: "10px",
-    overflow: "hidden",
-  },
-  leftPanel: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    background: "linear-gradient(to right, #6e629e, #51438b)",
-    color: "#fff",
-    padding: "20px",
-  },
-  rightPanel: {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    padding: "20px",
-  },
-  heading: {
-    fontSize: "2rem",
-    marginBottom: "20px",
-  },
-  paragraph: {
-    fontSize: "1rem",
-    textAlign: "center",
-    marginBottom: "20px",
-  },
-  form: {
-    width: "80%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  row: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    marginBottom: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  inputHalf: {
-    width: "48%",
-    padding: "10px",
-    marginBottom: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  fileInputContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: "20px",
-  },
-  fileInput: {
-    width: "70%",
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
-  avatarPreview: {
-    width: "50px",
-    height: "50px",
-    borderRadius: "50%",
-    objectFit: "cover",
-    border: "1px solid #ccc",
-    marginLeft: "20px",
-  },
-  signInButton: {
-    padding: "10px 20px",
-    backgroundColor: "transparent",
-    border: "2px solid #fff",
-    color: "#fff",
-    borderRadius: "5px",
-    textDecoration: "none",
-    cursor: "pointer",
-  },
-  signUpButton: {
-    width: "100%",
-    padding: "10px 20px",
-    backgroundColor: "#51438b",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
 };
 
 export default Register;

@@ -157,7 +157,7 @@ const Header = () => {
             !loading && (
               <Link
                 to="/login"
-                className="text-white text-center text-sm font-bold rounded border-2 px-4 py-2 pointer hover:bg-nbDarkTheme transition-all duration-300"
+                className="text-white text-center text-sm font-bold rounded border-2 px-4 py-2 pointer"
               >
                 Login
               </Link>
