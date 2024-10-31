@@ -18,7 +18,7 @@ const Profile = () => {
               <p className="text-2xl font-semibold mb-3">My Profile</p>
               <div className="px-4 w-full flex justify-center items-center mb-3">
                 <img
-                  className="w-full max-w-xs h-auto rounded-md object-cover shadow-md border border-gray-300"
+                  className="w-72 h-72 rounded-full object-cover shadow-md border border-gray-300"
                   src={user.avatar.url}
                   alt={`${user.firstName} ${user.lastName} Profile`}
                 />

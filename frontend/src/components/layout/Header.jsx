@@ -177,7 +177,7 @@ const Header = () => {
                             src={
                               user.avatar
                                 ? user.avatar.url
-                                : "https://res.clo udinary.com/dfxyjskzh/image/upload/v1725499896/Blank-Profile-Picture_ebngxw.webp"
+                                : "https://res.cloudinary.com/dfxyjskzh/image/upload/v1725499896/Blank-Profile-Picture_ebngxw.webp"
                             }
                             alt={`${user.firstName} ${
                               user.lastName ? user.lastName.charAt(0) : ""
