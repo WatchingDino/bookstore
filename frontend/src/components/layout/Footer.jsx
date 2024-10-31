@@ -19,15 +19,15 @@ const Footer = () => {
                 National Diaries
               </p>
               <p className="">
-                National Diaries is a specialty retailer offering a curated
-                selection of diaries, novels, planners, and other literary
-                essentials. Our mission is to provide high-quality, stylish, and
-                functional products for readers, writers, and anyone who values
-                thoughtful organization. Each item is carefully chosen to
-                inspire creativity, encourage planning, and make daily life more
-                enjoyable. With National Diaries, you’ll find the perfect tools
-                for capturing memories, setting goals, and exploring new
-                stories.
+                National Diaries offers a thoughtfully curated selection of
+                diaries, novels, planners, and literary essentials. Our mission
+                is to provide high-quality, stylish, and functional products
+                that inspire creativity and elevate organization for readers,
+                writers, and anyone who cherishes the art of planning. Each item
+                in our collection is meticulously selected to help you capture
+                memories, set goals, and dive into new stories. With National
+                Diaries, discover the perfect tools to enrich your daily life
+                and unleash your imagination.
               </p>
             </div>
 
@@ -66,19 +66,20 @@ const Footer = () => {
                   <span className="absolute left-0 bottom-0 w-full h-0.5 bg-black transform scale-x-100 transition-transform duration-300 ease-in-out"></span>
                 </p>
               </div>
+              <div className="font-normal"> 
+                <div className="flex items-center justify-center mb-1">
+                  <i className="pi pi-inbox pr-2 text-xl" />
+                  <p className="inline-block relative">
+                    national.diaries2024@gmail.com
+                  </p>
+                </div>
 
-              <div className="flex items-center justify-center mb-1">
-                <i className="pi pi-inbox pr-2 text-xl" />
-                <p className="inline-block relative">
-                  national.diaries2024@gmail.com
-                </p>
-              </div>
-
-              <div className="flex items-center justify-center mb-1">
-                <i className="pi pi-phone pr-2 text-xl" />
-                <div className="flex flex-col">
-                  <p className="inline-block relative">(+63) 987-6543-210</p>
-                  <p className="inline-block relative"> (+63 2) 8765-4321</p>
+                <div className="flex items-center justify-center mb-1">
+                  <i className="pi pi-phone pr-2 text-xl" />
+                  <div className="flex flex-col">
+                    <p className="inline-block relative">(+63) 987-6543-210</p>
+                    <p className="inline-block relative"> (+63 2) 8765-4321</p>
+                  </div>
                 </div>
               </div>
             </div>

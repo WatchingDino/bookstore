@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, clearErrors } from "../../actions/userActions";
 import { Input } from "@nextui-org/react";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -36,8 +37,27 @@ const Register = () => {
     }
   }, [dispatch, isAuthenticated, error, navigate]);
 
+  const validateInputs = () => {
+    if (!firstName || !lastName || !email || !password) {
+      return "All fields are required.";
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return "Email address is invalid.";
+    }
+    if (password.length < 6) {
+      return "Password must be at least 6 characters long.";
+    }
+    return null; 
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
+    const errorMessage = validateInputs();
+
+    if (errorMessage) {
+      toast.error(errorMessage);
+      return;
+    }
 
     const formData = new FormData();
     formData.set("firstName", firstName);
@@ -68,7 +88,7 @@ const Register = () => {
 
   return (
     <Fragment>
-      <div className="flex w-[70%] h-[500px] my-[50px] mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
+      <div className="flex w-[70%] h-[500px] my-4 mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
         <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-r from-[#6e629e] to-nbDarkTheme text-white p-5">
           <p className="text-2xl mb-4">Welcome Back!</p>
           <p className="text-center mb-4 font-normal">
@@ -123,7 +143,7 @@ const Register = () => {
               labelPlacement="inside"
               variant="bordered"
               radius="sm"
-              type="text"
+              type="email"
               label="Email"
               name="email"
               value={email}
@@ -137,7 +157,7 @@ const Register = () => {
               labelPlacement="inside"
               variant="bordered"
               radius="sm"
-              type="text"
+              type="password"
               label="Password"
               name="password"
               value={password}

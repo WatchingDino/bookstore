@@ -72,8 +72,8 @@ const Header = () => {
                   )}
 
                   <a
-                    href={location.pathname === "/" ? "/" : "/products"}
-                    // href={"/products"}
+                    // href={location.pathname === "/" ? "/" : "/products"}
+                    href={"/products"}
                     className="relative inline-flex ms-1 items-center text-md font-medium text-white group"
                   >
                     Products
@@ -165,27 +165,38 @@ const Header = () => {
                     ],
                   }}
                 >
-                  <DropdownSection aria-label="Profile & Orders" showDivider>
+                  <DropdownSection aria-label="My Profile" showDivider>
                     <DropdownItem
                       isReadOnly
                       key="profile"
                       className="h-14 gap-2 opacity-100"
                     >
-                      <User
-                        name={`${user.firstName} ${user.lastName}`}
-                        description={user.email}
-                        classNames={{
-                          name: "text-black font-bold font-roboto",
-                          description: "text-gray-600 font-bold font-roboto",
-                        }}
-                        avatarProps={{
-                          size: "sm",
-                          src: user.avatar
-                            ? user.avatar.url
-                            : "https://res.cloudinary.com/dfxyjskzh/image/upload/v1725499896/Blank-Profile-Picture_ebngxw.webp",
-                        }}
-                      />
+                      <div className="flex items-center">
+                        <div className="flex items-center justify-center w-10 h-10">
+                          <img
+                            src={
+                              user.avatar
+                                ? user.avatar.url
+                                : "https://res.clo udinary.com/dfxyjskzh/image/upload/v1725499896/Blank-Profile-Picture_ebngxw.webp"
+                            }
+                            alt={`${user.firstName} ${
+                              user.lastName ? user.lastName.charAt(0) : ""
+                            } Profile`}
+                            className="w-full h-full rounded-full object-cover object-center"
+                          />
+                        </div>
+                        <div className="ml-2 flex flex-col justify-start font-roboto">
+                          <div className="font-bold text-black text-md">
+                            {user.firstName} {user.lastName}
+                          </div>
+                          <div className="text-xs text-gray-600 font-semibold">
+                            {user.email}
+                          </div>
+                        </div>
+                      </div>
                     </DropdownItem>
+                  </DropdownSection>
+                  <DropdownSection aria-label="Manage Account & View Orders" showDivider>
                     <DropdownItem
                       key="personalInformation"
                       href="/me"

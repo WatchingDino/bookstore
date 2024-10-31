@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from "react";
 
 import { Link, useNavigate } from "react-router-dom";
 
-import { MDBDataTable } from "mdbreact";
+// import { MDBDataTable } from "mdbreact";
 
 import MetaData from "../layout/MetaData";
 

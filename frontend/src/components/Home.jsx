@@ -6,7 +6,7 @@ import Product from "./product/Product";
 import Loader from "./layout/Loader";
 
 const Home = () => {
-  const dispatch = useDispatch(); //
+  const dispatch = useDispatch();
 
   const { loading, products, error } = useSelector((state) => state.products);
 
@@ -23,13 +23,33 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // useEffect(() => {
+  //   if (location.pathname === "/products") {
+  //     const productsSection = document.getElementById("products");
+  //     if (productsSection) {
+  //       productsSection.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //     navigate("/");
+  //   }
+  // }, [location.pathname, navigate]);
+
   useEffect(() => {
     if (location.pathname === "/products") {
-      const productsSection = document.getElementById("products");
-      if (productsSection) {
-        productsSection.scrollIntoView({ behavior: "smooth" });
-      }
-      navigate("/");
+      const timeoutScroll = setTimeout(() => {
+        const productsSection = document.getElementById("products");
+        if (productsSection) {
+          productsSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 1000);
+
+      const timeoutNavigate = setTimeout(() => {
+        navigate("/");
+      }, 1000);
+
+      return () => {
+        clearTimeout(timeoutScroll);
+        clearTimeout(timeoutNavigate);
+      };
     }
   }, [location.pathname, navigate]);
 
@@ -41,9 +61,9 @@ const Home = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div className="bg-nbLightTheme pt-1">
+          <div className="bg-nbLightTheme pt-4">
             <section id="search" className="px-32">
-              <div className="container shadow bg-white rounded h-[40px] mt-4 flex justify-center items-center">
+              <div className="container shadow bg-white rounded h-[40px] flex justify-center items-center">
                 Search
               </div>
             </section>
@@ -52,7 +72,7 @@ const Home = () => {
                 Image Carousel
               </div>
             </section>
-            <section id="products" className="container px-24 pt-4">
+            <section id="products" className="container px-24 pt-2">
               <div className="row">
                 {products.map((product) => (
                   <Product key={product._id} product={product} />

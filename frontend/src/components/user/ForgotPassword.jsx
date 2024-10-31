@@ -35,7 +35,7 @@ const ForgotPassword = () => {
 
   return (
     <Fragment>
-      <div className="flex w-[70%] h-[500px] my-[50px] mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
+      <div className="flex w-[70%] h-[500px] my-4 mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
         <div className="flex-1 flex flex-col items-center justify-center bg-gradient-to-r from-[#6e629e] to-nbDarkTheme text-white p-5">
           <p className="text-2xl text-center mb-4">Forgot Your Password?</p>
           <p className="text-center mb-4 font-normal">

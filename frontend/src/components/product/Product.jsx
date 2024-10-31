@@ -101,12 +101,12 @@ const Product = ({ product }) => {
           </p>
 
           <div className="w-full flex gap-1 mt-2">
-            <button className="bg-nbTheme text-white h-8 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
+            <button className="bg-nbTheme text-white py-2 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
               Add to Cart
             </button>
             <Link
               to={`product/${product._id}`}
-              className="bg-nbTheme text-white h-8 flex justify-center items-center w-14 rounded-md hover:bg-[#3e326e] transition-all duration-300"
+              className="bg-nbTheme text-white py-2 flex justify-center items-center w-14 rounded-md hover:bg-[#3e326e] transition-all duration-300"
             >
               <i className="pi pi-info-circle text-md"></i>
             </Link>

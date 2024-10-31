@@ -36,7 +36,7 @@ const Login = () => {
 
   return (
     <Fragment>
-      <div className="flex w-[70%] h-[500px] my-[50px] mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
+      <div className="flex w-[70%] h-[500px] my-4 mx-auto shadow-lg rounded-lg overflow-hidden font-bold font-roboto">
         <div className="flex-1 flex flex-col items-center justify-center bg-white p-5">
           <p className="text-2xl mb-4">Login Account</p>
           <form
