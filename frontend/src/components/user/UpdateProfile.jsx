@@ -69,7 +69,7 @@ const UpdateProfile = () => {
 
   return (
     <Fragment>
-      <div className="bg-nbLightTheme py-4 font-roboto min-h-screen">
+      <div className="bg-nbLightTheme py-4 font-roboto">
         <div className="max-w-[80%] mx-auto">
           <form
             onSubmit={submitHandler}

@@ -303,7 +303,7 @@ const ProductDetails = () => {
         <Loader />
       ) : (
         <Fragment>
-          <div className="bg-nbLightTheme font-roboto min-h-screen py-4">
+          <div className="bg-nbLightTheme font-roboto py-4">
             <div className="rounded bg-white mx-5 shadow">
               <section id="productInformation" className="pb-5 pt-1">
                 <div className="flex justify-around items-start">
