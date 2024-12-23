@@ -304,7 +304,7 @@ const ProductDetails = () => {
       ) : (
         <Fragment>
           <div className="bg-nbLightTheme font-roboto py-4">
-            <div className="rounded bg-white mx-5 shadow">
+            <div className="max-w-[80%] mx-auto rounded bg-white shadow">
               <section id="productInformation" className="pb-5 pt-1">
                 <div className="flex justify-around items-start">
                   {/* LEFT SIDE | PRODUCT IMAGES */}
@@ -636,7 +636,7 @@ const ProductDetails = () => {
                     {product && product.genre && product.genre.length > 0 && (
                       <p className="pt-1 text-md">
                         <span className="font-bold">Genre:</span>{" "}
-                        {formatGenres(product.genre)}
+                       {formatGenres(product.genre)}
                       </p>
                     )}
 
@@ -655,9 +655,12 @@ const ProductDetails = () => {
                       </p>
                       <div className="flex items-center">
                         <span
-                          className="bg-red-500 text-white rounded px-4 py-2 mr-2 cursor-pointer text-md hover:bg-red-800 transition-all duration-300"
+                          className={`bg-red-500 text-white rounded px-4 py-2 mr-2 cursor-pointer text-md transition-all duration-300 ${
+                            product.stock === 0
+                              ? "bg-red-500/50 cursor-default"
+                              : "hover:bg-red-800"
+                          }`}
                           onClick={decreaseQty}
-                          disabled={product.stock === 0}
                         >
                           -
                         </span>
@@ -668,7 +671,11 @@ const ProductDetails = () => {
                           disabled
                         />
                         <span
-                          className="bg-blue-500 text-white rounded px-4 py-2 cursor-pointer text-md hover:bg-blue-800 transition-all duration-300"
+                          className={`bg-blue-500 text-white rounded px-4 py-2 cursor-pointer text-md transition-all duration-300 ${
+                            product.stock === 0
+                              ? "bg-blue-500/50 cursor-default"
+                              : "hover:bg-blue-800"
+                          }`}
                           onClick={increaseQty}
                           disabled={product.stock === 0}
                         >
@@ -679,8 +686,10 @@ const ProductDetails = () => {
 
                     <div className="flex items-center justify-center mt-3">
                       <button
-                        className={`text-white text-center text-md font-bold rounded py-2 pointer w-[70%] hover:bg-[#3e326e] transition-all duration-300 ${
-                          product.stock === 0 ? "bg-opacity-50" : "bg-nbTheme"
+                        className={`text-white text-center text-md font-bold rounded py-2 w-[70%] transition-all duration-300 ${
+                          product.stock === 0
+                            ? "bg-nbTheme/50"
+                            : "bg-nbTheme hover:bg-[#3e326e]"
                         }`}
                         onClick={addToCart}
                         disabled={product.stock === 0}

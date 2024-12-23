@@ -42,7 +42,7 @@ const Login = () => {
           <form
             onSubmit={submitHandler}
             className="w-4/5 flex flex-col items-center"
-          >
+          >   
             <Input
               labelPlacement="inside"
               variant="bordered"
@@ -79,7 +79,7 @@ const Login = () => {
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}
-            </button>
+            </button> 
           </form>
         </div>
 

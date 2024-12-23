@@ -10,12 +10,13 @@ import {
   DropdownSection,
   DropdownItem,
   Button,
-  User,
+  Badge,
 } from "@nextui-org/react";
 
 const Header = () => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const location = useLocation();
 
@@ -119,15 +120,22 @@ const Header = () => {
 
         <div className="">
           {user ? (
-            //     {user.role === "admin" && (
-            //       <Link
-            //         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-            //         to="/dashboard"
-            //       >
-            //         Dashboard
-            //       </Link>
-            //     )}
-            <div className="">
+            <div className="flex items-center gap-3">
+              <a
+                href="/cart"
+                className="hover:bg-gray-200/80 w-12 h-10 rounded flex items-center justify-center relative"
+              >              
+                {cartItems.length > 0 && (
+                  <Badge
+                    color="danger"
+                    content={cartItems.length}
+                    shape="circle"
+                    className="absolute -top-2 -right-7 border-none text-xs text-white font-bold h-5 w-5 flex items-center justify-center"
+                  />
+                )}
+                <i className="pi pi-shopping-cart text-2xl text-white" />
+              </a>
+
               <Dropdown
                 placement="bottom-end"
                 showArrow
@@ -196,7 +204,10 @@ const Header = () => {
                       </div>
                     </DropdownItem>
                   </DropdownSection>
-                  <DropdownSection aria-label="Manage Account & View Orders" showDivider>
+                  <DropdownSection
+                    aria-label="Manage Account & View Orders"
+                    showDivider
+                  >
                     <DropdownItem
                       key="personalInformation"
                       href="/me"

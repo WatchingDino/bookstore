@@ -40,11 +40,11 @@ const Home = () => {
         if (productsSection) {
           productsSection.scrollIntoView({ behavior: "smooth" });
         }
-      }, 1000);
+      }, 300);
 
       const timeoutNavigate = setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 300);
 
       return () => {
         clearTimeout(timeoutScroll);
@@ -62,12 +62,12 @@ const Home = () => {
       ) : (
         <Fragment>
           <div className="bg-nbLightTheme pt-4">
-            <section id="search" className="px-32">
+            <section id="search" className="max-w-[80%] mx-auto">
               <div className="container shadow bg-white rounded h-[40px] flex justify-center items-center">
                 Search
               </div>
             </section>
-            <section id="carousel" className="px-32">
+            <section id="carousel" className="max-w-[80%] mx-auto">
               <div className="container shadow bg-white rounded h-[320px] mt-3 flex justify-center items-center">
                 Image Carousel
               </div>

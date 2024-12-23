@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Rating } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import { addItemToCart } from "../../actions/cartActions";
 
 const Product = ({ product }) => {
+  const dispatch = useDispatch();
+  const [quantity] = useState(1);
+
+  const addToCart = () => {
+    dispatch(addItemToCart(product._id, quantity));
+  };
+
   // ================ IMAGE TRANSITION ================
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -31,7 +40,7 @@ const Product = ({ product }) => {
   return (
     <div className="my-2 w-full sm:w-1/2 lg:w-1/4 font-roboto">
       <div
-        className="rounded-lg shadow-lg cursor-pointer border-0 bg-white pb-3"
+        className="rounded-lg w-full shadow-lg cursor-pointer border-0 bg-white pb-3"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -101,7 +110,10 @@ const Product = ({ product }) => {
           </p>
 
           <div className="w-full flex gap-1 mt-2">
-            <button className="bg-nbTheme text-white py-2 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300">
+            <button
+              onClick={addToCart}
+              className="bg-nbTheme text-white py-2 font-semibold w-full text-sm rounded-md hover:bg-[#3e326e] transition-all duration-300"
+            >
               Add to Cart
             </button>
             <Link

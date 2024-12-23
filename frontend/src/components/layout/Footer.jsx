@@ -31,7 +31,7 @@ const Footer = () => {
               </p>
             </div>
 
-            <div className="w-full md:w-1/3 text-center font-bold">
+            <div className="w-full md:w-1/3 text-center font-bold my-4">
               <a
                 href="#learnMore"
                 className="flex items-center justify-center group mb-1"

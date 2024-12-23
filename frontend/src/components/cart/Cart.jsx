@@ -29,7 +29,11 @@ const Cart = () => {
     <Fragment>
       <MetaData title={"Your Cart"} />
       {cartItems.length === 0 ? (
-        <h2 className="mt-5">Your Cart is Empty</h2>
+        <div className="bg-nbLightTheme py-4">
+          <div className="max-w-[80%] mx-auto">
+           
+          </div>
+        </div>
       ) : (
         <Fragment>
           <h2 className="mt-5">
